@@ -295,7 +295,8 @@ var AiCommentExtension = Node.create({
 var ai_comment_default = AiCommentExtension;
 
 // src/components/editor/index.tsx
-import { jsx as jsx4 } from "react/jsx-runtime";
+import { Toaster } from "sonner";
+import { jsx as jsx4, jsxs as jsxs2 } from "react/jsx-runtime";
 var BLOCK_TIMEOUT = 5e3;
 var Editor2 = () => {
   const timeoutId = useRef(null);
@@ -332,7 +333,9 @@ var Editor2 = () => {
       if (timeoutId.current) {
         clearTimeout(timeoutId.current);
       }
+      console.log("timeout");
       const timeout = setTimeout(() => {
+        console.log("timeout");
         if (leaving) {
           return;
         }
@@ -433,11 +436,14 @@ var Editor2 = () => {
   if (!editor) {
     return null;
   }
-  return /* @__PURE__ */ jsx4(
+  return /* @__PURE__ */ jsxs2(
     "div",
     {
       className: "relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto",
-      children: /* @__PURE__ */ jsx4(EditorContent, { editor })
+      children: [
+        /* @__PURE__ */ jsx4(Toaster, { position: "bottom-left" }),
+        /* @__PURE__ */ jsx4(EditorContent, { editor })
+      ]
     }
   );
 };

@@ -324,6 +324,7 @@ var AiCommentExtension = import_react2.Node.create({
 var ai_comment_default = AiCommentExtension;
 
 // src/components/editor/index.tsx
+var import_sonner2 = require("sonner");
 var import_jsx_runtime4 = require("react/jsx-runtime");
 var BLOCK_TIMEOUT = 5e3;
 var Editor2 = () => {
@@ -361,7 +362,9 @@ var Editor2 = () => {
       if (timeoutId.current) {
         clearTimeout(timeoutId.current);
       }
+      console.log("timeout");
       const timeout = setTimeout(() => {
+        console.log("timeout");
         if (leaving) {
           return;
         }
@@ -462,11 +465,14 @@ var Editor2 = () => {
   if (!editor) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
     "div",
     {
       className: "relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto",
-      children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react3.EditorContent, { editor })
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_sonner2.Toaster, { position: "bottom-left" }),
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react3.EditorContent, { editor })
+      ]
     }
   );
 };

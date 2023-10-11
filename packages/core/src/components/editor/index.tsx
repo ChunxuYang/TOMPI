@@ -11,7 +11,7 @@ import { useCompletion } from "ai/react";
 import { getPrevText } from "@/lib/editor";
 import { useLeavingCount } from "@/utils/hooks/use-leaving-count";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import AiCommentExtension from "./extensions/ai-comment";
 import { Toaster } from "sonner";
 
