@@ -11,8 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import React, { useEffect, useCallback } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const AiCommentNode = (props: any) => {
   const accept = () => {
@@ -154,7 +152,7 @@ const AiCommentExtension = Node.create<AiCommentExtensionOptions>({
           ) {
             // get the text of the previous paragraph
             const prevParagraphText = prevParagraphNode.textContent;
-            console.log(prevParagraphText);
+            // console.log(prevParagraphText);
 
             complete(prevParagraphText).then((res) => {
               const { comment, modification } = JSON.parse(

@@ -4,9 +4,6 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEffect, useRef } from "react";
-// import { Toaster } from "@/components/ui/toaster";
-// import { ToastAction } from "@/components/ui/toast";
-// import { useToast } from "@/components/ui/use-toast";
 import { useCompletion } from "ai/react";
 import { getPrevText } from "@/lib/editor";
 import { useLeavingCount } from "@/utils/hooks/use-leaving-count";
@@ -14,6 +11,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import AiCommentExtension from "./extensions/ai-comment";
 import { Toaster } from "sonner";
+import UserBehaviorDetector from "./extensions/user-behavior-detector";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 const BLOCK_TIMEOUT = 5000;
 
@@ -26,7 +25,6 @@ const Editor = () => {
       clearTimeout(timeoutId.current);
     }
   });
-  // const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -45,6 +43,7 @@ const Editor = () => {
           return commentComplete(prompt);
         },
       }),
+      UserBehaviorDetector,
     ],
 
     editorProps: {
@@ -63,16 +62,12 @@ const Editor = () => {
         clearTimeout(timeoutId.current);
       }
 
-      console.log("timeout");
-
       const timeout = setTimeout(() => {
-        console.log("timeout");
         if (leaving) {
           return;
         }
 
-        toast("Seems like you are blocked", {
-          // title: "Seems like you are blocked",
+        toast("Seems like your writing is blocked", {
           description: "Would you like AI to finish your sentence?",
           action: {
             label: "Complete",
@@ -128,16 +123,6 @@ const Editor = () => {
       editor?.getHTML() !== "<h1></h1>" &&
       editor?.getText() !== ""
     ) {
-      // toast({
-      //   title: "Seems like you are leaving",
-      //   description: "Would you like AI to give you some ideas?",
-      //   action: (
-      //     <ToastAction altText="Save" onClick={() => {}}>
-      //       Give me some ideas!
-      //     </ToastAction>
-      //   ),
-      // });
-
       clearCount();
 
       toast("Don't know how to continue?", {
@@ -210,6 +195,37 @@ const Editor = () => {
     >
       <Toaster position="bottom-left" />
       <EditorContent editor={editor} />
+      <Card className="absolute top-5 left-5">
+        <CardHeader>
+          <CardTitle>User Behavior</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <p className="text-sm font-medium leading-none">Typing Speed</p>
+              <p className="text-sm text-muted-foreground">
+                {editor.storage.userBehaviorDetector
+                  .user_behavior()
+                  .typing_speed.toFixed(2)}{" "}
+                chars/s
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-medium leading-none">
+                Distraction Count
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {
+                  editor.storage.userBehaviorDetector.user_behavior()
+                    .prob_distraction
+                }{" "}
+                times
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       {/* <Toaster /> */}
     </div>
   );
