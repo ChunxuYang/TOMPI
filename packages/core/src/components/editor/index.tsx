@@ -1,18 +1,20 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import { useEffect, useRef } from "react";
 import { useCompletion } from "ai/react";
+import { useEffect, useRef } from "react";
+import { toast, Toaster } from "sonner";
+
+import { Button } from "@/components/ui/button";
 import { getPrevText } from "@/lib/editor";
 import { useLeavingCount } from "@/utils/hooks/use-leaving-count";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import AiCommentExtension from "./extensions/ai-comment";
-import { Toaster } from "sonner";
-import UserBehaviorDetector from "./extensions/user-behavior-detector";
+import Placeholder from "@tiptap/extension-placeholder";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import AiCommentExtension from "./extensions/ai-comment";
+import AiHighlightExtenstion from "./extensions/ai-highlight";
+import UserBehaviorDetector from "./extensions/user-behavior-detector";
 
 const BLOCK_TIMEOUT = 5000;
 
@@ -38,11 +40,12 @@ const Editor = () => {
       Placeholder.configure({
         placeholder: "Start writing...",
       }),
-      AiCommentExtension.configure({
-        complete: (prompt) => {
-          return commentComplete(prompt);
-        },
-      }),
+      // AiCommentExtension.configure({
+      //   complete: (prompt) => {
+      //     return commentComplete(prompt);
+      //   },
+      // }),
+      AiHighlightExtenstion.configure({}),
       UserBehaviorDetector,
     ],
 
@@ -53,132 +56,132 @@ const Editor = () => {
       },
     },
 
-    onUpdate() {
-      // leaving logic
-      clearCount();
+    // onUpdate() {
+    //   // leaving logic
+    //   clearCount();
 
-      // timeout logic
-      if (timeoutId.current) {
-        clearTimeout(timeoutId.current);
-      }
+    //   // timeout logic
+    //   if (timeoutId.current) {
+    //     clearTimeout(timeoutId.current);
+    //   }
 
-      const timeout = setTimeout(() => {
-        if (leaving) {
-          return;
-        }
+    //   const timeout = setTimeout(() => {
+    //     if (leaving) {
+    //       return;
+    //     }
 
-        toast("Seems like your writing is blocked", {
-          description: "Would you like AI to finish your sentence?",
-          action: {
-            label: "Complete",
-            onClick: () => {
-              if (editor) {
-                complete(
-                  getPrevText(editor, {
-                    chars: 5000,
-                  })
-                );
-              }
-            },
-          },
-        });
+    //     toast("Seems like your writing is blocked", {
+    //       description: "Would you like AI to finish your sentence?",
+    //       action: {
+    //         label: "Complete",
+    //         onClick: () => {
+    //           if (editor) {
+    //             complete(
+    //               getPrevText(editor, {
+    //                 chars: 5000,
+    //               })
+    //             );
+    //           }
+    //         },
+    //       },
+    //     });
 
-        setFocus();
-      }, BLOCK_TIMEOUT);
+    //     setFocus();
+    //   }, BLOCK_TIMEOUT);
 
-      timeoutId.current = timeout;
-    },
+    //   timeoutId.current = timeout;
+    // },
   });
 
-  const prev = useRef("");
+  // const prev = useRef("");
 
-  const { complete, completion, isLoading, stop } = useCompletion({
-    id: "essaypilot",
-    api: "/api/generate",
-  });
+  // const { complete, completion, isLoading, stop } = useCompletion({
+  //   id: "essaypilot",
+  //   api: "/api/generate",
+  // });
 
-  const { complete: ideaComplete, isLoading: ideaIsLoading } = useCompletion({
-    id: "essaypilot",
-    api: "/api/idea",
-  });
+  // const { complete: ideaComplete, isLoading: ideaIsLoading } = useCompletion({
+  //   id: "essaypilot",
+  //   api: "/api/idea",
+  // });
 
-  const { complete: commentComplete, isLoading: commentIsLoading } =
-    useCompletion({
-      id: "essaypilot",
-      api: "/api/generate/comment",
-    });
+  // const { complete: commentComplete, isLoading: commentIsLoading } =
+  //   useCompletion({
+  //     id: "essaypilot",
+  //     api: "/api/generate/comment",
+  //   });
 
-  useEffect(() => {
-    const diff = completion.slice(prev.current.length);
-    prev.current = completion;
-    if (diff) {
-      editor?.commands.insertContent(diff);
-    }
-  }, [completion, isLoading]);
+  // useEffect(() => {
+  //   const diff = completion.slice(prev.current.length);
+  //   prev.current = completion;
+  //   if (diff) {
+  //     editor?.commands.insertContent(diff);
+  //   }
+  // }, [completion, isLoading]);
 
-  // if the page is not empty, and leaveCount > 4, then show toast
-  useEffect(() => {
-    if (
-      count > 4 &&
-      editor?.getHTML() !== "<h1></h1>" &&
-      editor?.getText() !== ""
-    ) {
-      clearCount();
+  // // if the page is not empty, and leaveCount > 4, then show toast
+  // useEffect(() => {
+  //   if (
+  //     count > 4 &&
+  //     editor?.getHTML() !== "<h1></h1>" &&
+  //     editor?.getText() !== ""
+  //   ) {
+  //     clearCount();
 
-      toast("Don't know how to continue?", {
-        description: "Would you like AI to give you some ideas?",
-        action: {
-          label: "Ideas",
-          onClick: () => {
-            if (!editor) throw new Error("Editor not found");
+  //     toast("Don't know how to continue?", {
+  //       description: "Would you like AI to give you some ideas?",
+  //       action: {
+  //         label: "Ideas",
+  //         onClick: () => {
+  //           if (!editor) throw new Error("Editor not found");
 
-            toast.promise(
-              ideaComplete(
-                getPrevText(editor, {
-                  chars: 5000,
-                })
-              ),
-              {
-                loading: "Generating ideas...",
-                error: "Failed to generate ideas",
-                success: (completion) => {
-                  if (!completion) throw new Error("Failed to generate ideas");
-                  const ideas = JSON.parse(completion) as string[];
+  //           toast.promise(
+  //             ideaComplete(
+  //               getPrevText(editor, {
+  //                 chars: 5000,
+  //               })
+  //             ),
+  //             {
+  //               loading: "Generating ideas...",
+  //               error: "Failed to generate ideas",
+  //               success: (completion) => {
+  //                 if (!completion) throw new Error("Failed to generate ideas");
+  //                 const ideas = JSON.parse(completion) as string[];
 
-                  return (
-                    <div className="space-y-2">
-                      {ideas.map((idea, index) => (
-                        <Button
-                          variant={"outline"}
-                          className="w-full"
-                          key={index}
-                          onClick={() => {
-                            if (editor) {
-                              complete(
-                                getPrevText(editor, {
-                                  chars: 5000,
-                                }) +
-                                  "Now, write about this idea: " +
-                                  idea
-                              );
-                            }
-                          }}
-                        >
-                          {idea}
-                        </Button>
-                      ))}
-                    </div>
-                  );
-                },
-              }
-            );
-          },
-        },
-      });
+  //                 return (
+  //                   <div className="space-y-2">
+  //                     {ideas.map((idea, index) => (
+  //                       <Button
+  //                         variant={"outline"}
+  //                         className="w-full"
+  //                         key={index}
+  //                         onClick={() => {
+  //                           if (editor) {
+  //                             complete(
+  //                               getPrevText(editor, {
+  //                                 chars: 5000,
+  //                               }) +
+  //                                 "Now, write about this idea: " +
+  //                                 idea
+  //                             );
+  //                           }
+  //                         }}
+  //                       >
+  //                         {idea}
+  //                       </Button>
+  //                     ))}
+  //                   </div>
+  //                 );
+  //               },
+  //             }
+  //           );
+  //         },
+  //       },
+  //     });
 
-      clearCount();
-    }
-  }, [count]);
+  //     clearCount();
+  //   }
+  // }, [count]);
 
   const setFocus = () => {
     editor?.chain().focus().run();
@@ -193,8 +196,14 @@ const Editor = () => {
       className="relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto"
       // onClick={setFocus}
     >
+      <button
+        onClick={() => editor.commands.toggleAiHighlight()}
+        className={editor.isActive("highlight") ? "is-active" : ""}
+      >
+        toggleHighlight
+      </button>
       <Toaster position="bottom-left" />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor}></EditorContent>
       <Card className="absolute top-5 left-5">
         <CardHeader>
           <CardTitle>User Behavior</CardTitle>
