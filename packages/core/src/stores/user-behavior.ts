@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { focusAtom } from "jotai-optics";
 
 /**
  * User Behavior Metrics
@@ -55,16 +56,40 @@ export type UserBehaviorCategorized = {
   prob_distraction: ProbDistraction;
 };
 
-const duration_block = atom<Number>(0);
-const typing_speed = atom<Number>(0);
-const sentence_complete = atom<Number>(0);
-const revision_frequency = atom<Number>(0);
-const prob_distraction = atom<Number>(0);
+const userBehaviorAtom = atom<UserBehavior>({
+  duration_block: 0,
+  typing_speed: 0,
+  sentence_complete: 0,
+  revision_frequency: 0,
+  prob_distraction: 0,
+});
 
-export {
-  duration_block,
-  typing_speed,
-  sentence_complete,
-  revision_frequency,
-  prob_distraction,
-};
+export const typingSpeedAtom = focusAtom(userBehaviorAtom, (optic) =>
+  optic.prop("typing_speed")
+);
+
+export const sentenceCompleteAtom = focusAtom(userBehaviorAtom, (optic) =>
+  optic.prop("sentence_complete")
+);
+
+export const revisionFrequencyAtom = focusAtom(userBehaviorAtom, (optic) =>
+  optic.prop("revision_frequency")
+);
+
+export const probDistractionAtom = focusAtom(userBehaviorAtom, (optic) =>
+  optic.prop("prob_distraction")
+);
+
+// const duration_block = atom<Number>(0);
+// const typing_speed = atom<Number>(0);
+// const sentence_complete = atom<Number>(0);
+// const revision_frequency = atom<Number>(0);
+// const prob_distraction = atom<Number>(0);
+
+// export {
+//   duration_block,
+//   typing_speed,
+//   sentence_complete,
+//   revision_frequency,
+//   prob_distraction,
+// };

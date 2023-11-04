@@ -1,33 +1,36 @@
 "use client";
 
 import { useCompletion } from "ai/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { toast, Toaster } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { getPrevText } from "@/lib/editor";
+import { UserBehavior } from "@/stores/user-behavior";
 import { useLeavingCount } from "@/utils/hooks/use-leaving-count";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import AiCommentExtension from "./extensions/ai-comment";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import AiHighlightExtenstion from "./extensions/ai-highlight";
 import UserBehaviorDetector from "./extensions/user-behavior-detector";
 
-const BLOCK_TIMEOUT = 5000;
+interface EditorProps {
+  debugMode?: boolean;
+  onUserBehaviorChange?: (behavior: UserBehavior) => void;
+}
 
-const Editor = () => {
-  const timeoutId = useRef<NodeJS.Timeout | null>(null);
-
-  const { leaving, count, clearCount } = useLeavingCount(() => {
-    // clear timeout
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
-    }
-  });
-
+const Editor = ({
+  onUserBehaviorChange = (behavior: UserBehavior) => {},
+  debugMode = true,
+}: EditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -183,9 +186,17 @@ const Editor = () => {
   //   }
   // }, [count]);
 
-  const setFocus = () => {
-    editor?.chain().focus().run();
-  };
+  // const userBehavior =
+  //   editor?.storage.userBehaviorDetector.user_behavior() as UserBehavior;
+
+  const userBehavior = useMemo(() => {
+    return editor?.storage.userBehaviorDetector.user_behavior() as UserBehavior;
+  }, [editor?.storage.userBehaviorDetector.user_behavior()]);
+
+  // call onUserBehaviorChange when user behavior changes
+  useEffect(() => {
+    onUserBehaviorChange(userBehavior);
+  }, [userBehavior]);
 
   if (!editor) {
     return null;
@@ -196,45 +207,43 @@ const Editor = () => {
       className="relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto"
       // onClick={setFocus}
     >
-      <button
-        onClick={() => editor.commands.toggleAiHighlight()}
-        className={editor.isActive("highlight") ? "is-active" : ""}
-      >
-        toggleHighlight
-      </button>
       <Toaster position="bottom-left" />
-      <EditorContent editor={editor}></EditorContent>
-      <Card className="absolute top-5 left-5">
-        <CardHeader>
-          <CardTitle>User Behavior</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-sm font-medium leading-none">Typing Speed</p>
-              <p className="text-sm text-muted-foreground">
-                {editor.storage.userBehaviorDetector
-                  .user_behavior()
-                  .typing_speed.toFixed(2)}{" "}
-                chars/s
-              </p>
-            </div>
+      {debugMode && (
+        <Card className="absolute top-5 left-5">
+          <CardHeader>
+            <CardTitle>User Behavior</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <p className="text-sm font-medium leading-none">Typing Speed</p>
+                <p className="text-sm text-muted-foreground">
+                  {userBehavior.typing_speed.toFixed(2)} chars/s
+                </p>
+              </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-medium leading-none">
-                Distraction Count
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {
-                  editor.storage.userBehaviorDetector.user_behavior()
-                    .prob_distraction
-                }{" "}
-                times
-              </p>
+              <div className="space-y-2">
+                <p className="text-sm font-medium leading-none">
+                  Distraction Count
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {userBehavior.prob_distraction} times
+                </p>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+          <CardFooter>
+            <Button
+              onClick={() => editor.commands.toggleAiHighlight()}
+              className={editor.isActive("highlight") ? "is-active" : ""}
+            >
+              toggleHighlight
+            </Button>
+          </CardFooter>
+        </Card>
+      )}
+      <EditorContent editor={editor}></EditorContent>
+
       {/* <Toaster /> */}
     </div>
   );
