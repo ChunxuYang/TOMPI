@@ -17,7 +17,7 @@ export default function UserBehaviorDetectorPlugin() {
   const setProbDistraction = useSetAtom(probDistractionAtom);
   const lastCharacterCount = React.useRef(0);
   const lastTime = React.useRef(Date.now());
-  const { leaving, count } = useLeavingCount();
+  const { count } = useLeavingCount();
 
   useEffect(() => {
     const removeTextContentListener = editor.registerTextContentListener(

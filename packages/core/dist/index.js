@@ -90,6 +90,7 @@ styleInject('*,\n::before,\n::after {\n  box-sizing: border-box;\n  border-width
 
 // src/components/lexical-editor/index.tsx
 var import_jotai3 = require("jotai");
+var import_react4 = require("react");
 var import_sonner = require("sonner");
 
 // src/stores/user-behavior.ts
@@ -457,7 +458,7 @@ function UserBehaviorDetectorPlugin() {
   const setProbDistraction = (0, import_jotai2.useSetAtom)(probDistractionAtom);
   const lastCharacterCount = import_react3.default.useRef(0);
   const lastTime = import_react3.default.useRef(Date.now());
-  const { leaving, count } = useLeavingCount();
+  const { count } = useLeavingCount();
   (0, import_react3.useEffect)(() => {
     const removeTextContentListener = editor.registerTextContentListener(
       (textContent) => {
@@ -520,6 +521,10 @@ function Editor({
   };
   const typingSpeed = (0, import_jotai3.useAtomValue)(typingSpeedAtom);
   const probDistraction = (0, import_jotai3.useAtomValue)(probDistractionAtom);
+  const userBehavior = (0, import_jotai3.useAtomValue)(userBehaviorAtom);
+  (0, import_react4.useEffect)(() => {
+    onUserBehaviorChange == null ? void 0 : onUserBehaviorChange(userBehavior);
+  }, [userBehavior]);
   return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_sonner.Toaster, { position: "bottom-left" }),
     debugMode && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(Card, { className: "absolute top-5 left-5", children: [

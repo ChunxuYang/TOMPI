@@ -56,6 +56,7 @@ styleInject('*,\n::before,\n::after {\n  box-sizing: border-box;\n  border-width
 
 // src/components/lexical-editor/index.tsx
 import { useAtomValue } from "jotai";
+import { useEffect as useEffect4 } from "react";
 import { Toaster } from "sonner";
 
 // src/stores/user-behavior.ts
@@ -430,7 +431,7 @@ function UserBehaviorDetectorPlugin() {
   const setProbDistraction = useSetAtom(probDistractionAtom);
   const lastCharacterCount = React4.useRef(0);
   const lastTime = React4.useRef(Date.now());
-  const { leaving, count } = useLeavingCount();
+  const { count } = useLeavingCount();
   useEffect3(() => {
     const removeTextContentListener = editor.registerTextContentListener(
       (textContent) => {
@@ -493,6 +494,10 @@ function Editor({
   };
   const typingSpeed = useAtomValue(typingSpeedAtom);
   const probDistraction = useAtomValue(probDistractionAtom);
+  const userBehavior = useAtomValue(userBehaviorAtom);
+  useEffect4(() => {
+    onUserBehaviorChange == null ? void 0 : onUserBehaviorChange(userBehavior);
+  }, [userBehavior]);
   return /* @__PURE__ */ jsxs2("div", { className: "relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto", children: [
     /* @__PURE__ */ jsx5(Toaster, { position: "bottom-left" }),
     debugMode && /* @__PURE__ */ jsxs2(Card, { className: "absolute top-5 left-5", children: [

@@ -1,12 +1,14 @@
 "use client";
 
 import { useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
 import { Toaster } from "sonner";
 
 import {
   probDistractionAtom,
   typingSpeedAtom,
   UserBehavior,
+  userBehaviorAtom,
 } from "@/stores/user-behavior";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
@@ -85,10 +87,13 @@ export default function Editor({
     onError,
   };
 
-  // const [editor] = useLexicalComposerContext();
-
   const typingSpeed = useAtomValue(typingSpeedAtom);
   const probDistraction = useAtomValue(probDistractionAtom);
+  const userBehavior = useAtomValue(userBehaviorAtom);
+
+  useEffect(() => {
+    onUserBehaviorChange?.(userBehavior);
+  }, [userBehavior]);
 
   return (
     <div className="relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto">

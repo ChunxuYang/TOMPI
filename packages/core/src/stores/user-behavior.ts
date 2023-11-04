@@ -56,7 +56,7 @@ export type UserBehaviorCategorized = {
   prob_distraction: ProbDistraction;
 };
 
-const userBehaviorAtom = atom<UserBehavior>({
+export const userBehaviorAtom = atom<UserBehavior>({
   duration_block: 0,
   typing_speed: 0,
   sentence_complete: 0,
