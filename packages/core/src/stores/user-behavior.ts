@@ -64,20 +64,24 @@ export const userBehaviorAtom = atom<UserBehavior>({
   prob_distraction: 0,
 });
 
+export const durationBlockAtom = focusAtom(userBehaviorAtom, (optic) =>
+  optic.prop("duration_block"),
+);
+
 export const typingSpeedAtom = focusAtom(userBehaviorAtom, (optic) =>
-  optic.prop("typing_speed")
+  optic.prop("typing_speed"),
 );
 
 export const sentenceCompleteAtom = focusAtom(userBehaviorAtom, (optic) =>
-  optic.prop("sentence_complete")
+  optic.prop("sentence_complete"),
 );
 
 export const revisionFrequencyAtom = focusAtom(userBehaviorAtom, (optic) =>
-  optic.prop("revision_frequency")
+  optic.prop("revision_frequency"),
 );
 
 export const probDistractionAtom = focusAtom(userBehaviorAtom, (optic) =>
-  optic.prop("prob_distraction")
+  optic.prop("prob_distraction"),
 );
 
 // const duration_block = atom<Number>(0);

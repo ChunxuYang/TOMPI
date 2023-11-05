@@ -1,4 +1,8 @@
+// import Link from "next/link";
+
 import Link from "next/link";
+
+import ThemeToggle from "./theme-toggle";
 
 // import ThemeToggle from "./theme-toggle";
 
@@ -8,6 +12,8 @@ export default function Header() {
       <Link href="/" className="text-xl hover:text-accent-foreground">
         EssayPilot
       </Link>
+
+      <ThemeToggle />
     </nav>
   );
 }

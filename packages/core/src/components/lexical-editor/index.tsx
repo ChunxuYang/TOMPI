@@ -41,6 +41,8 @@ import AiHighlightPlugin, {
   TOGGLE_AI_HIGHLIGHT_COMMAND,
 } from "./plugins/ai-highlight-plugin";
 import UserBehaviorDetectorPlugin from "./plugins/user-behavior-detector-plugin";
+import {ThemeProvider, useTheme} from "next-themes";
+import TreeViewPlugin from "@/components/lexical-editor/plugins/treeview-plugin";
 
 interface EditorProps {
   debugMode?: boolean;
@@ -55,10 +57,14 @@ export default function Editor({
   debugMode = true,
   onUserBehaviorChange,
 }: EditorProps) {
+  const {theme} = useTheme() as {
+    theme: "light" | "dark" | "system";
+  };
+
   const config = {
     namespace: "lexical-editor",
     theme: {
-      root: "prose dark:prose-invert h-full w-full mx-auto focus:outline-none",
+      root: "prose dark:prose-invert focus:outline-none",
       link: "cursor-pointer",
       placeholder: "text-gray-400",
       text: {
@@ -96,58 +102,68 @@ export default function Editor({
   }, [userBehavior]);
 
   return (
-    <div className="relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto">
-      <Toaster position="bottom-left" />
-      {debugMode && (
-        <Card className="absolute top-5 left-5">
-          <CardHeader>
-            <CardTitle>User Behavior</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <p className="text-sm font-medium leading-none">Typing Speed</p>
-                <p className="text-sm text-muted-foreground">
-                  {typingSpeed.toFixed(2)} chars/s
-                </p>
-              </div>
+      <div className="relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto">
+        <Toaster position="bottom-left" theme={theme} />
+        {debugMode && (
+          <Card className="fixed bottom-10 right-10">
+            <CardHeader>
+              <CardTitle>User Behavior</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium leading-none">
+                    Typing Speed
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {typingSpeed.toFixed(2)} chars/s
+                  </p>
+                </div>
 
-              <div className="space-y-2">
-                <p className="text-sm font-medium leading-none">
-                  Distraction Count
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {probDistraction} times
-                </p>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium leading-none">
+                    Distraction Count
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {probDistraction} times
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            {/* <Button
+            </CardContent>
+            <CardFooter>
+              {/* <Button
                 onClick={() => {
                   editor.dispatchCommand(TOGGLE_AI_HIGHLIGHT_COMMAND, "");
                 }}
               >
                 toggleHighlight
               </Button> */}
-          </CardFooter>
-        </Card>
-      )}
-      <LexicalComposer initialConfig={config}>
-        <RichTextPlugin
-          contentEditable={<ContentEditable />}
-          placeholder={null}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <AutoFocusPlugin />
-        <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-        <HistoryPlugin />
-        <ListPlugin />
-        <LinkPlugin />
-        <TabIndentationPlugin />
-        <AiHighlightPlugin debugMode={debugMode} />
-        <UserBehaviorDetectorPlugin />
-      </LexicalComposer>
-    </div>
+            </CardFooter>
+          </Card>
+        )}
+        <LexicalComposer initialConfig={config}>
+          <RichTextPlugin
+            contentEditable={<ContentEditable />}
+            placeholder={
+              <span className="lexical-placeholder">Input something...</span>
+            }
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <AutoFocusPlugin />
+
+          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          <HistoryPlugin />
+          <ListPlugin />
+          <LinkPlugin />
+          <TabIndentationPlugin />
+          <AiHighlightPlugin debugMode={debugMode} />
+          <UserBehaviorDetectorPlugin />
+          <Card className={"absolute bottom-0 overflow-auto max-h-60 max-w-2xl"}>
+          {
+            debugMode ? <TreeViewPlugin />: ""
+          }
+          </Card>
+        </LexicalComposer>
+      </div>
   );
 }

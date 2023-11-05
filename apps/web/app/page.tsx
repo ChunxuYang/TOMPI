@@ -4,7 +4,6 @@ import { Editor, UI, UserBehavior } from "@tompi/core";
 
 export default function Home() {
   function onUserBehaviorChange(userBehavior: UserBehavior) {
-    console.log(userBehavior);
     if (userBehavior.typing_speed > 5) {
       UI.notification("Typing speed is too fast");
     }

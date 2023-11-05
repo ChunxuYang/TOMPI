@@ -36,7 +36,7 @@ export default function UserBehaviorDetectorPlugin() {
 
         lastCharacterCount.current = characterCount;
         lastTime.current = currentTime;
-      }
+      },
     );
 
     return removeTextContentListener;
