@@ -61,7 +61,7 @@ export default function Editor({
   const config = {
     namespace: "lexical-editor",
     theme: {
-      root: "prose dark:prose-invert focus:outline-none flex-1",
+      root: "prose dark:prose-invert lg:prose-xl focus:outline-none flex-1 mx-auto",
       link: "cursor-pointer",
       placeholder: "text-gray-400",
       text: {
@@ -95,7 +95,7 @@ export default function Editor({
   }, [userBehavior]);
 
   return (
-    <div className="relative border rounded-lg shadow-sm h-full p-10 bg-card flex flex-col overflow-auto">
+    <div className="relative h-full overflow-auto">
       <Toaster position="bottom-left" theme={theme} />
       {debugMode && (
         <Card className="fixed bottom-10 right-10">
@@ -132,26 +132,29 @@ export default function Editor({
           </CardFooter>
         </Card>
       )}
+      <div className="h-full flex flex-row justify-center space-x-4">
+        <div
+          className={
+            "w-full p-6 rounded-xl border bg-card text-card-foreground shadow"
+          }
+        >
+          <LexicalComposer initialConfig={config}>
+            <RichTextPlugin
+              contentEditable={<ContentEditable />}
+              placeholder={null}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <AutoFocusPlugin />
 
-      <div className="flex-1 flex flex-row">
-        <LexicalComposer initialConfig={config}>
-          <RichTextPlugin
-            contentEditable={<ContentEditable />}
-            placeholder={
-              <span className="lexical-placeholder">Input something...</span>
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <AutoFocusPlugin />
-
-          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-          <HistoryPlugin />
-          <ListPlugin />
-          <LinkPlugin />
-          <TabIndentationPlugin />
-          <AiHighlightPlugin debugMode={debugMode} />
-          <UserBehaviorDetectorPlugin />
-        </LexicalComposer>
+            <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+            <HistoryPlugin />
+            <ListPlugin />
+            <LinkPlugin />
+            <TabIndentationPlugin />
+            <AiHighlightPlugin debugMode={debugMode} />
+            <UserBehaviorDetectorPlugin />
+          </LexicalComposer>
+        </div>
 
         <Separator orientation={"vertical"} />
         <CommentList />
