@@ -8590,7 +8590,9 @@ function CommentPlugin() {
         ({ paragraphId, id }) => {
           const rootNode = (0, import_lexical3.$getRoot)();
           const paragraphNodes = rootNode.getChildren().filter((node) => node instanceof CustomParagraphNode);
-          const paragraphNode = paragraphNodes[paragraphId];
+          const paragraphNode = paragraphNodes.find(
+            (node) => node.__id === paragraphId
+          );
           return true;
         },
         import_lexical3.COMMAND_PRIORITY_EDITOR

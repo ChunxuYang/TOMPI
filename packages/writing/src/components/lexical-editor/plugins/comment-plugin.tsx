@@ -43,7 +43,7 @@ import {
 import { CustomParagraphNode } from "./custom-paragraph-plugin";
 
 const HIGHLIGHT_RANGE_COMMAND: LexicalCommand<{
-  paragraphId: number;
+  paragraphId: string;
   id: string;
 }> = createCommand();
 
@@ -132,9 +132,9 @@ export default function CommentPlugin() {
             .getChildren()
             .filter((node) => node instanceof CustomParagraphNode);
 
-          const paragraphNode = paragraphNodes[
-            paragraphId
-          ] as CustomParagraphNode;
+          const paragraphNode = paragraphNodes.find(
+            (node) => node.__id === paragraphId
+          );
 
           return true;
         },

@@ -8572,7 +8572,9 @@ function CommentPlugin() {
         ({ paragraphId, id }) => {
           const rootNode = $getRoot();
           const paragraphNodes = rootNode.getChildren().filter((node) => node instanceof CustomParagraphNode);
-          const paragraphNode = paragraphNodes[paragraphId];
+          const paragraphNode = paragraphNodes.find(
+            (node) => node.__id === paragraphId
+          );
           return true;
         },
         COMMAND_PRIORITY_EDITOR2
