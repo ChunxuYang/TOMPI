@@ -112,6 +112,7 @@ function styleInject(css, { insertAt } = {}) {
 styleInject("@tailwind base;\n@tailwind components;\n@tailwind utilities;\n@layer base {\n  :root {\n    --background: 0 0% 100%;\n    --foreground: 222.2 84% 4.9%;\n    --card: 0 0% 100%;\n    --card-foreground: 222.2 84% 4.9%;\n    --popover: 0 0% 100%;\n    --popover-foreground: 222.2 84% 4.9%;\n    --primary: 222.2 47.4% 11.2%;\n    --primary-foreground: 210 40% 98%;\n    --secondary: 210 40% 96.1%;\n    --secondary-foreground: 222.2 47.4% 11.2%;\n    --muted: 210 40% 96.1%;\n    --muted-foreground: 215.4 16.3% 46.9%;\n    --accent: 210 40% 96.1%;\n    --accent-foreground: 222.2 47.4% 11.2%;\n    --destructive: 0 84.2% 60.2%;\n    --destructive-foreground: 210 40% 98%;\n    --border: 214.3 31.8% 91.4%;\n    --input: 214.3 31.8% 91.4%;\n    --ring: 222.2 84% 4.9%;\n    --radius: 0.5rem;\n  }\n  .dark {\n    --background: 222.2 84% 4.9%;\n    --foreground: 210 40% 98%;\n    --card: 222.2 84% 4.9%;\n    --card-foreground: 210 40% 98%;\n    --popover: 222.2 84% 4.9%;\n    --popover-foreground: 210 40% 98%;\n    --primary: 210 40% 98%;\n    --primary-foreground: 222.2 47.4% 11.2%;\n    --secondary: 217.2 32.6% 17.5%;\n    --secondary-foreground: 210 40% 98%;\n    --muted: 217.2 32.6% 17.5%;\n    --muted-foreground: 215 20.2% 65.1%;\n    --accent: 217.2 32.6% 17.5%;\n    --accent-foreground: 210 40% 98%;\n    --destructive: 0 62.8% 30.6%;\n    --destructive-foreground: 210 40% 98%;\n    --border: 217.2 32.6% 17.5%;\n    --input: 217.2 32.6% 17.5%;\n    --ring: 212.7 26.8% 83.9%;\n  }\n}\n@layer base {\n  * {\n    @apply border-border;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n@layer components {\n  .title {\n    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl select-none;\n  }\n  .paragraph {\n    @apply leading-7 [&:not(:first-child)]:mt-8;\n  }\n}\n.lexical-placeholder {\n  color: #adb5bd;\n  content: attr(data-placeholder);\n  float: left;\n  height: 0;\n  pointer-events: none;\n  position: absolute;\n}\n");
 
 // src/components/lexical-editor/index.tsx
+var import_crypto = require("crypto");
 var import_jotai7 = require("jotai");
 var import_lexical4 = require("lexical");
 var import_next_themes = require("next-themes");
@@ -8589,10 +8590,18 @@ function CommentPlugin() {
         HIGHLIGHT_RANGE_COMMAND,
         ({ paragraphId, id }) => {
           const rootNode = (0, import_lexical3.$getRoot)();
-          const paragraphNodes = rootNode.getChildren().filter((node) => node instanceof CustomParagraphNode);
+          const paragraphNodes = rootNode.getChildren().filter(
+            (node) => node instanceof CustomParagraphNode
+          );
           const paragraphNode = paragraphNodes.find(
             (node) => node.__id === paragraphId
           );
+          if (!paragraphNode) {
+            return false;
+          }
+          editor.update(() => {
+            paragraphNode.__comment = true;
+          });
           return true;
         },
         import_lexical3.COMMAND_PRIORITY_EDITOR
@@ -8746,7 +8755,13 @@ function Editor({
       import_link.LinkNode,
       import_mark.MarkNode,
       AiHiglightNode,
-      CommentTextNode
+      CommentTextNode,
+      {
+        replace: import_lexical4.ParagraphNode,
+        with(node) {
+          return new CustomParagraphNode((0, import_crypto.randomUUID)(), false, false);
+        }
+      }
     ],
     onError,
     editorState: prepopulatedRichText
@@ -8802,7 +8817,7 @@ function Editor({
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(AiHighlightPlugin, { debugMode }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(UserBehaviorDetectorPlugin, {}),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CommentPlugin, {}),
-            debugMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "absolute bottom-0 left-0 border border-red-500 overflow-auto max-w-full h-1/2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TreeViewPlugin, {}) })
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: !!debugMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "absolute bottom-0 left-0 border border-red-500 overflow-auto max-w-full h-1/2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TreeViewPlugin, {}) }) })
           ] })
         }
       ),

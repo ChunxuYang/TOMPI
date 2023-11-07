@@ -130,11 +130,21 @@ export default function CommentPlugin() {
           const rootNode = $getRoot();
           const paragraphNodes = rootNode
             .getChildren()
-            .filter((node) => node instanceof CustomParagraphNode);
+            .filter(
+              (node) => node instanceof CustomParagraphNode
+            ) as CustomParagraphNode[];
 
           const paragraphNode = paragraphNodes.find(
             (node) => node.__id === paragraphId
           );
+
+          if (!paragraphNode) {
+            return false;
+          }
+
+          editor.update(() => {
+            paragraphNode.__comment = true;
+          });
 
           return true;
         },

@@ -1,7 +1,13 @@
 "use client";
 
+import { randomUUID } from "crypto";
 import { useAtomValue } from "jotai";
-import { $createParagraphNode, $createTextNode, $getRoot } from "lexical";
+import {
+  $createParagraphNode,
+  $createTextNode,
+  $getRoot,
+  ParagraphNode,
+} from "lexical";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { Toaster } from "sonner";
@@ -45,6 +51,7 @@ import AiHighlightPlugin, {
   AiHiglightNode,
 } from "./plugins/ai-highlight-plugin";
 import CommentPlugin, { CommentTextNode } from "./plugins/comment-plugin";
+import { CustomParagraphNode } from "./plugins/custom-paragraph-plugin";
 import TreeViewPlugin from "./plugins/treeview-plugin";
 import UserBehaviorDetectorPlugin from "./plugins/user-behavior-detector-plugin";
 
@@ -112,6 +119,12 @@ export default function Editor({
       MarkNode,
       AiHiglightNode,
       CommentTextNode,
+      {
+        replace: ParagraphNode,
+        with(node) {
+          return new CustomParagraphNode(randomUUID(), false, false);
+        },
+      },
     ],
     onError,
     editorState: prepopulatedRichText,
@@ -186,12 +199,13 @@ export default function Editor({
             <AiHighlightPlugin debugMode={debugMode} />
             <UserBehaviorDetectorPlugin />
             <CommentPlugin />
-
-            {debugMode && (
-              <div className="absolute bottom-0 left-0 border border-red-500 overflow-auto max-w-full h-1/2">
-                <TreeViewPlugin />
-              </div>
-            )}
+            <>
+              {!!debugMode && (
+                <div className="absolute bottom-0 left-0 border border-red-500 overflow-auto max-w-full h-1/2">
+                  <TreeViewPlugin />
+                </div>
+              )}
+            </>
           </LexicalComposer>
         </div>
 
