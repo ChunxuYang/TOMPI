@@ -174,6 +174,9 @@ importers:
       '@lexical/list':
         specifier: ^0.12.2
         version: 0.12.2(lexical@0.12.2)
+      '@lexical/mark':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
       '@lexical/markdown':
         specifier: ^0.12.2
         version: 0.12.2(@lexical/clipboard@0.12.2)(@lexical/selection@0.12.2)(lexical@0.12.2)
@@ -183,12 +186,18 @@ importers:
       '@lexical/rich-text':
         specifier: ^0.12.2
         version: 0.12.2(@lexical/clipboard@0.12.2)(@lexical/selection@0.12.2)(@lexical/utils@0.12.2)(lexical@0.12.2)
+      '@lexical/utils':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
       jotai:
         specifier: ^2.5.1
         version: 2.5.1(@types/react@18.2.5)(react@18.2.0)
       jotai-optics:
         specifier: ^0.3.1
         version: 0.3.1(jotai@2.5.1)(optics-ts@2.4.1)
+      jotai-zustand:
+        specifier: ^0.3.0
+        version: 0.3.0(jotai@2.5.1)
       lexical:
         specifier: ^0.12.2
         version: 0.12.2
@@ -204,6 +213,9 @@ importers:
       sonner:
         specifier: ^1.2.0
         version: 1.2.0(react-dom@18.2.0)(react@18.2.0)
+      zustand:
+        specifier: ^4.4.6
+        version: 4.4.6(@types/react@18.2.5)(react@18.2.0)
     devDependencies:
       '@tompi/ui':
         specifier: workspace:*
@@ -4085,6 +4097,14 @@ packages:
       optics-ts: 2.4.1
     dev: false
 
+  /jotai-zustand@0.3.0(jotai@2.5.1):
+    resolution: {integrity: sha512-hwu49XzES51tzKe9qqHS7LTlqesWbmzqhL+m7zEEW6hTOOGfnYiMYMmPb8ueMKCmMe122L3thwMeeblsFtlzPg==}
+    peerDependencies:
+      jotai: '>=1.11.0'
+    dependencies:
+      jotai: 2.5.1(@types/react@18.2.5)(react@18.2.0)
+    dev: false
+
   /jotai@2.5.1(@types/react@18.2.5)(react@18.2.0):
     resolution: {integrity: sha512-vanPCCSuHczUXNbVh/iUunuMfrWRL4FdBtAbTRmrfqezJcKb8ybBTg8iivyYuUHapjcDETyJe1E4inlo26bVHA==}
     engines: {node: '>=12.20.0'}
@@ -5567,6 +5587,14 @@ packages:
       tslib: 2.5.0
     dev: false
 
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
@@ -5722,3 +5750,23 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  /zustand@4.4.6(@types/react@18.2.5)(react@18.2.0):
+    resolution: {integrity: sha512-Rb16eW55gqL4W2XZpJh0fnrATxYEG3Apl2gfHTyDSE965x/zxslTikpNch0JgNjJA9zK6gEFW8Fl6d1rTZaqgg==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.5
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false

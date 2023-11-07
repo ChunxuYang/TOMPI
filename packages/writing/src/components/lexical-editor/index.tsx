@@ -1,9 +1,12 @@
 "use client";
 
 import { useAtomValue } from "jotai";
+import { $createParagraphNode, $createTextNode, $getRoot } from "lexical";
+import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { Toaster } from "sonner";
 
+import CommentList from "@/components/comment/comment-list";
 import {
   probDistractionAtom,
   typingSpeedAtom,
@@ -13,9 +16,13 @@ import {
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
+import { MarkNode } from "@lexical/mark";
 import { TRANSFORMERS } from "@lexical/markdown";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import {
+  InitialConfigType,
+  LexicalComposer,
+} from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
@@ -25,21 +32,42 @@ import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPl
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
-
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
+  Separator,
 } from "@tompi/ui";
+
 import AiHighlightPlugin, {
   AiHiglightNode,
 } from "./plugins/ai-highlight-plugin";
+import CommentPlugin, { CommentTextNode } from "./plugins/comment-plugin";
+import TreeViewPlugin from "./plugins/treeview-plugin";
 import UserBehaviorDetectorPlugin from "./plugins/user-behavior-detector-plugin";
-import { useTheme } from "next-themes";
-import { Separator } from "@tompi/ui";
-import CommentList from "@/components/comment/comment-list";
+
+function prepopulatedRichText() {
+  const root = $getRoot();
+  if (root.getFirstChild() === null) {
+    const paragraph = $createParagraphNode();
+    paragraph.append(
+      $createTextNode(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
+      )
+    );
+    root.append(paragraph);
+
+    const paragraph2 = $createParagraphNode();
+    paragraph2.append(
+      $createTextNode(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
+      )
+    );
+    root.append(paragraph2);
+  }
+}
 
 interface EditorProps {
   debugMode?: boolean;
@@ -58,7 +86,7 @@ export default function Editor({
     theme: "light" | "dark" | "system";
   };
 
-  const config = {
+  const config: InitialConfigType = {
     namespace: "lexical-editor",
     theme: {
       root: "prose dark:prose-invert lg:prose-xl focus:outline-none flex-1 mx-auto",
@@ -81,9 +109,12 @@ export default function Editor({
       CodeHighlightNode,
       AutoLinkNode,
       LinkNode,
+      MarkNode,
       AiHiglightNode,
+      CommentTextNode,
     ],
     onError,
+    editorState: prepopulatedRichText,
   };
 
   const typingSpeed = useAtomValue(typingSpeedAtom);
@@ -135,7 +166,7 @@ export default function Editor({
       <div className="h-full flex flex-row justify-center space-x-4">
         <div
           className={
-            "w-full p-6 rounded-xl border bg-card text-card-foreground shadow"
+            "w-full relative p-6 rounded-xl border bg-card text-card-foreground shadow"
           }
         >
           <LexicalComposer initialConfig={config}>
@@ -151,8 +182,16 @@ export default function Editor({
             <ListPlugin />
             <LinkPlugin />
             <TabIndentationPlugin />
+
             <AiHighlightPlugin debugMode={debugMode} />
             <UserBehaviorDetectorPlugin />
+            <CommentPlugin />
+
+            {debugMode && (
+              <div className="absolute bottom-0 left-0 border border-red-500 overflow-auto max-w-full h-1/2">
+                <TreeViewPlugin />
+              </div>
+            )}
           </LexicalComposer>
         </div>
 

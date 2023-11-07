@@ -28,24 +28,28 @@
     "@lexical/code": "^0.12.2",
     "@lexical/link": "^0.12.2",
     "@lexical/list": "^0.12.2",
+    "@lexical/mark": "^0.12.2",
     "@lexical/markdown": "^0.12.2",
     "@lexical/react": "^0.12.2",
     "@lexical/rich-text": "^0.12.2",
+    "@lexical/utils": "^0.12.2",
     "jotai": "^2.5.1",
     "jotai-optics": "^0.3.1",
+    "jotai-zustand": "^0.3.0",
     "lexical": "^0.12.2",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sonner": "^1.2.0"
+    "sonner": "^1.2.0",
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@tompi/ui": "workspace:*",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
     "tsup": "^7.2.0",
     "typescript": "^4.5.3"
   }
