@@ -78,10 +78,8 @@ function styleInject(css, { insertAt } = {}) {
 styleInject("@tailwind base;\n@tailwind components;\n@tailwind utilities;\n@layer base {\n  :root {\n    --background: 0 0% 100%;\n    --foreground: 222.2 84% 4.9%;\n    --card: 0 0% 100%;\n    --card-foreground: 222.2 84% 4.9%;\n    --popover: 0 0% 100%;\n    --popover-foreground: 222.2 84% 4.9%;\n    --primary: 222.2 47.4% 11.2%;\n    --primary-foreground: 210 40% 98%;\n    --secondary: 210 40% 96.1%;\n    --secondary-foreground: 222.2 47.4% 11.2%;\n    --muted: 210 40% 96.1%;\n    --muted-foreground: 215.4 16.3% 46.9%;\n    --accent: 210 40% 96.1%;\n    --accent-foreground: 222.2 47.4% 11.2%;\n    --destructive: 0 84.2% 60.2%;\n    --destructive-foreground: 210 40% 98%;\n    --border: 214.3 31.8% 91.4%;\n    --input: 214.3 31.8% 91.4%;\n    --ring: 222.2 84% 4.9%;\n    --radius: 0.5rem;\n  }\n  .dark {\n    --background: 222.2 84% 4.9%;\n    --foreground: 210 40% 98%;\n    --card: 222.2 84% 4.9%;\n    --card-foreground: 210 40% 98%;\n    --popover: 222.2 84% 4.9%;\n    --popover-foreground: 210 40% 98%;\n    --primary: 210 40% 98%;\n    --primary-foreground: 222.2 47.4% 11.2%;\n    --secondary: 217.2 32.6% 17.5%;\n    --secondary-foreground: 210 40% 98%;\n    --muted: 217.2 32.6% 17.5%;\n    --muted-foreground: 215 20.2% 65.1%;\n    --accent: 217.2 32.6% 17.5%;\n    --accent-foreground: 210 40% 98%;\n    --destructive: 0 62.8% 30.6%;\n    --destructive-foreground: 210 40% 98%;\n    --border: 217.2 32.6% 17.5%;\n    --input: 217.2 32.6% 17.5%;\n    --ring: 212.7 26.8% 83.9%;\n  }\n}\n@layer base {\n  * {\n    @apply border-border;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n@layer components {\n  .title {\n    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl select-none;\n  }\n  .paragraph {\n    @apply leading-7 [&:not(:first-child)]:mt-8;\n  }\n}\n.lexical-placeholder {\n  color: #adb5bd;\n  content: attr(data-placeholder);\n  float: left;\n  height: 0;\n  pointer-events: none;\n  position: absolute;\n}\n");
 
 // src/components/lexical-editor/index.tsx
-import { randomUUID } from "crypto";
 import { useAtomValue as useAtomValue4 } from "jotai";
 import {
-  $createParagraphNode,
   $createTextNode as $createTextNode2,
   $getRoot as $getRoot2,
   ParagraphNode as ParagraphNode3
@@ -101,12 +99,12 @@ import { createStore as createZustandStore } from "zustand/vanilla";
 var _commentsAtom = atom([
   {
     id: "3da02fe4-1eb7-41e9-b0a4-7ebc7f8acf7e",
-    paragraphId: "p-3da02fe4-1eb7-41e9-b0a4-7ebc7f8acf7e",
+    paragraphIndex: 0,
     comment: "This is a comment"
   },
   {
     id: "146b4244-2030-4a18-be2b-238b29dcc781",
-    paragraphId: "p-146b4244-2030-4a18-be2b-238b29dcc781",
+    paragraphIndex: 1,
     comment: "This is another comment"
   }
 ]);
@@ -8475,23 +8473,19 @@ import {
 
 // src/components/lexical-editor/plugins/custom-paragraph-plugin.tsx
 import { ParagraphNode } from "lexical";
+var current_id = 0;
 var CustomParagraphNode = class _CustomParagraphNode extends ParagraphNode {
-  constructor(id, comment, active, key) {
+  constructor(comment, active, key) {
     super(key);
     this.__comment = comment != null ? comment : false;
     this.__active = active != null ? active : false;
-    this.__id = id;
+    this.__id = `customParagraph-${current_id++}`;
   }
   static getType() {
     return "customParagraph";
   }
   static clone(node) {
-    return new _CustomParagraphNode(
-      node.__id,
-      node.__comment,
-      node.__active,
-      node.__key
-    );
+    return new _CustomParagraphNode(node.__comment, node.__active, node.__key);
   }
   createDOM(config) {
     const element = super.createDOM(config);
@@ -8515,7 +8509,18 @@ var CustomParagraphNode = class _CustomParagraphNode extends ParagraphNode {
     }
     return updated;
   }
+  setComment(comment) {
+    const writable = this.getWritable();
+    writable.__comment = comment;
+  }
+  setActive(active) {
+    const writable = this.getWritable();
+    writable.__active = active;
+  }
 };
+function $createCustomParagraphNode(comment, active) {
+  return new CustomParagraphNode(comment, active);
+}
 
 // src/components/lexical-editor/plugins/comment-plugin.tsx
 var HIGHLIGHT_RANGE_COMMAND = createCommand2();
@@ -8575,19 +8580,17 @@ function CommentPlugin() {
     return mergeRegister(
       editor.registerCommand(
         HIGHLIGHT_RANGE_COMMAND,
-        ({ paragraphId, id }) => {
+        ({ paragraphIndex, id }) => {
           const rootNode = $getRoot();
           const paragraphNodes = rootNode.getChildren().filter(
             (node) => node instanceof CustomParagraphNode
           );
-          const paragraphNode = paragraphNodes.find(
-            (node) => node.__id === paragraphId
-          );
+          const paragraphNode = paragraphNodes[paragraphIndex];
           if (!paragraphNode) {
             return false;
           }
           editor.update(() => {
-            paragraphNode.__comment = true;
+            paragraphNode.setComment(true);
           });
           return true;
         },
@@ -8599,12 +8602,35 @@ function CommentPlugin() {
     let addedIndex = 0;
     comments.forEach((comment) => {
       editor.dispatchCommand(HIGHLIGHT_RANGE_COMMAND, {
-        paragraphId: comment.paragraphId,
+        paragraphIndex: comment.paragraphIndex,
         id: comment.id
       });
       addedIndex++;
     });
   }, [comments]);
+  useEffect5(() => {
+    editor.update(() => {
+      const rootNode = $getRoot();
+      const paragraphNodes = rootNode.getChildren().filter(
+        (node) => node instanceof CustomParagraphNode
+      );
+      paragraphNodes.forEach((node) => {
+        node.setActive(false);
+      });
+      if (currentActiveComment) {
+        const { paragraphIndex } = currentActiveComment;
+        const rootNode2 = $getRoot();
+        const paragraphNodes2 = rootNode2.getChildren().filter(
+          (node) => node instanceof CustomParagraphNode
+        );
+        const paragraphNode = paragraphNodes2[paragraphIndex];
+        if (!paragraphNode) {
+          return;
+        }
+        paragraphNode.setActive(true);
+      }
+    });
+  }, [currentActiveComment, comments]);
   return null;
 }
 
@@ -8693,14 +8719,14 @@ import { Fragment as Fragment3, jsx as jsx10, jsxs as jsxs4 } from "react/jsx-ru
 function prepopulatedRichText() {
   const root = $getRoot2();
   if (root.getFirstChild() === null) {
-    const paragraph = $createParagraphNode();
+    const paragraph = $createCustomParagraphNode(false, false);
     paragraph.append(
       $createTextNode2(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
       )
     );
     root.append(paragraph);
-    const paragraph2 = $createParagraphNode();
+    const paragraph2 = $createCustomParagraphNode(false, false);
     paragraph2.append(
       $createTextNode2(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
@@ -8743,10 +8769,11 @@ function Editor({
       MarkNode,
       AiHiglightNode,
       CommentTextNode,
+      CustomParagraphNode,
       {
         replace: ParagraphNode3,
         with(node) {
-          return new CustomParagraphNode(randomUUID(), false, false);
+          return new CustomParagraphNode(false, false);
         }
       }
     ],

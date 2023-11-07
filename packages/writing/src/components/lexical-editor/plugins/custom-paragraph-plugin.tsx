@@ -1,5 +1,7 @@
 import { EditorConfig, ParagraphNode } from "lexical";
 
+let current_id = 0;
+
 export class CustomParagraphNode extends ParagraphNode {
   __id: string;
   __comment: boolean;
@@ -9,20 +11,15 @@ export class CustomParagraphNode extends ParagraphNode {
     return "customParagraph";
   }
 
-  constructor(id: string, comment?: boolean, active?: boolean, key?: string) {
+  constructor(comment?: boolean, active?: boolean, key?: string) {
     super(key);
     this.__comment = comment ?? false;
     this.__active = active ?? false;
-    this.__id = id;
+    this.__id = `customParagraph-${current_id++}`;
   }
 
   static clone(node: CustomParagraphNode) {
-    return new CustomParagraphNode(
-      node.__id,
-      node.__comment,
-      node.__active,
-      node.__key
-    );
+    return new CustomParagraphNode(node.__comment, node.__active, node.__key);
   }
 
   createDOM(config: EditorConfig): HTMLElement {
@@ -53,12 +50,21 @@ export class CustomParagraphNode extends ParagraphNode {
     }
     return updated;
   }
+
+  setComment(comment: boolean) {
+    const writable = this.getWritable();
+    writable.__comment = comment;
+  }
+
+  setActive(active: boolean) {
+    const writable = this.getWritable();
+    writable.__active = active;
+  }
 }
 
 export function $createCustomParagraphNode(
-  id: string,
   comment?: boolean,
   active?: boolean
 ) {
-  return new CustomParagraphNode(id, comment, active);
+  return new CustomParagraphNode(comment, active);
 }

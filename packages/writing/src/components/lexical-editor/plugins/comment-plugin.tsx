@@ -43,7 +43,7 @@ import {
 import { CustomParagraphNode } from "./custom-paragraph-plugin";
 
 const HIGHLIGHT_RANGE_COMMAND: LexicalCommand<{
-  paragraphId: string;
+  paragraphIndex: number;
   id: string;
 }> = createCommand();
 
@@ -125,7 +125,7 @@ export default function CommentPlugin() {
     return mergeRegister(
       editor.registerCommand(
         HIGHLIGHT_RANGE_COMMAND,
-        ({ paragraphId, id }) => {
+        ({ paragraphIndex, id }) => {
           // get the paragraph node
           const rootNode = $getRoot();
           const paragraphNodes = rootNode
@@ -134,16 +134,14 @@ export default function CommentPlugin() {
               (node) => node instanceof CustomParagraphNode
             ) as CustomParagraphNode[];
 
-          const paragraphNode = paragraphNodes.find(
-            (node) => node.__id === paragraphId
-          );
+          const paragraphNode = paragraphNodes[paragraphIndex];
 
           if (!paragraphNode) {
             return false;
           }
 
           editor.update(() => {
-            paragraphNode.__comment = true;
+            paragraphNode.setComment(true);
           });
 
           return true;
@@ -161,7 +159,7 @@ export default function CommentPlugin() {
 
     comments.forEach((comment) => {
       editor.dispatchCommand(HIGHLIGHT_RANGE_COMMAND, {
-        paragraphId: comment.paragraphId,
+        paragraphIndex: comment.paragraphIndex,
         id: comment.id,
       });
 
@@ -169,18 +167,41 @@ export default function CommentPlugin() {
     });
   }, [comments]);
 
-  // useEffect(() => {
-  //   if (currentActiveComment) {
-  //     const { id } = currentActiveComment;
-  //     const node = $getNodeByKey(`comment-node-${id}`);
-  //     if (!node) {
-  //       return;
-  //     }
+  useEffect(() => {
+    editor.update(() => {
+      // remove all comment text nodes
+      const rootNode = $getRoot();
+      const paragraphNodes = rootNode
+        .getChildren()
+        .filter(
+          (node) => node instanceof CustomParagraphNode
+        ) as CustomParagraphNode[];
 
-  //     // set the node as active
-  //     node.__active = true;
-  //   }
-  // }, [currentActiveComment]);
+      paragraphNodes.forEach((node) => {
+        node.setActive(false);
+      });
+      if (currentActiveComment) {
+        const { paragraphIndex } = currentActiveComment;
+
+        const rootNode = $getRoot();
+        const paragraphNodes = rootNode
+          .getChildren()
+          .filter(
+            (node) => node instanceof CustomParagraphNode
+          ) as CustomParagraphNode[];
+
+        const paragraphNode = paragraphNodes[paragraphIndex];
+
+        if (!paragraphNode) {
+          return;
+        }
+
+        // set the node as active
+
+        paragraphNode.setActive(true);
+      }
+    });
+  }, [currentActiveComment, comments]);
 
   return null;
 }

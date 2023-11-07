@@ -1,6 +1,5 @@
 "use client";
 
-import { randomUUID } from "crypto";
 import { useAtomValue } from "jotai";
 import {
   $createParagraphNode,
@@ -51,14 +50,17 @@ import AiHighlightPlugin, {
   AiHiglightNode,
 } from "./plugins/ai-highlight-plugin";
 import CommentPlugin, { CommentTextNode } from "./plugins/comment-plugin";
-import { CustomParagraphNode } from "./plugins/custom-paragraph-plugin";
+import {
+  $createCustomParagraphNode,
+  CustomParagraphNode,
+} from "./plugins/custom-paragraph-plugin";
 import TreeViewPlugin from "./plugins/treeview-plugin";
 import UserBehaviorDetectorPlugin from "./plugins/user-behavior-detector-plugin";
 
 function prepopulatedRichText() {
   const root = $getRoot();
   if (root.getFirstChild() === null) {
-    const paragraph = $createParagraphNode();
+    const paragraph = $createCustomParagraphNode(false, false);
     paragraph.append(
       $createTextNode(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
@@ -66,7 +68,7 @@ function prepopulatedRichText() {
     );
     root.append(paragraph);
 
-    const paragraph2 = $createParagraphNode();
+    const paragraph2 = $createCustomParagraphNode(false, false);
     paragraph2.append(
       $createTextNode(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
@@ -119,10 +121,11 @@ export default function Editor({
       MarkNode,
       AiHiglightNode,
       CommentTextNode,
+      CustomParagraphNode,
       {
         replace: ParagraphNode,
         with(node) {
-          return new CustomParagraphNode(randomUUID(), false, false);
+          return new CustomParagraphNode(false, false);
         },
       },
     ],

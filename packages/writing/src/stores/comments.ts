@@ -11,19 +11,19 @@ export type PointType = {
 export type CommentType = {
   id: string;
   // from: number;
-  paragraphId: string;
+  paragraphIndex: number;
   comment: string;
 };
 
 export const _commentsAtom = atom<CommentType[]>([
   {
     id: "3da02fe4-1eb7-41e9-b0a4-7ebc7f8acf7e",
-    paragraphId: "p-3da02fe4-1eb7-41e9-b0a4-7ebc7f8acf7e",
+    paragraphIndex: 0,
     comment: "This is a comment",
   },
   {
     id: "146b4244-2030-4a18-be2b-238b29dcc781",
-    paragraphId: "p-146b4244-2030-4a18-be2b-238b29dcc781",
+    paragraphIndex: 1,
     comment: "This is another comment",
   },
 ]);
