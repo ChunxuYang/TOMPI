@@ -1,1 +1,6 @@
-module.exports = require("@tompi/ui/postcss")
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
