@@ -1,24 +1,25 @@
 import { PrimitiveAtom, useAtom, useAtomValue } from "jotai";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CommentType, currentActiveCommentIdAtom } from "@/stores/comments";
-import { Button, Card, CardFooter, CardHeader, CardTitle } from "@tompi/ui";
 
 interface CommentItemProps {
   commentAtom: PrimitiveAtom<CommentType>;
+  onRemove: () => void;
 }
 
-export default function CommentItem({ commentAtom }: CommentItemProps) {
+export default function CommentItem({
+  commentAtom,
+  onRemove,
+}: CommentItemProps) {
   const comment = useAtomValue(commentAtom);
   const [currentActiveCommentId, setCurrentActiveCommentId] = useAtom(
     currentActiveCommentIdAtom
   );
   return (
     <Card
-      className={
-        currentActiveCommentId.activeCommentId === comment.id
-          ? "shadow-lg"
-          : "shadow-sm"
-      }
+      className={"w-64"}
       onMouseEnter={() =>
         setCurrentActiveCommentId(() => ({ activeCommentId: comment.id }))
       }
@@ -31,7 +32,15 @@ export default function CommentItem({ commentAtom }: CommentItemProps) {
       </CardHeader>
       {currentActiveCommentId.activeCommentId === comment.id && (
         <CardFooter className="flex justify-between">
-          <Button variant="outline">Decline</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              console.log("remove");
+              onRemove();
+            }}
+          >
+            Decline
+          </Button>
           <Button>Accept</Button>
         </CardFooter>
       )}

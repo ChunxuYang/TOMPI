@@ -13,6 +13,14 @@ import { Toaster } from "sonner";
 
 import CommentList from "@/components/comment/comment-list";
 import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import {
   probDistractionAtom,
   typingSpeedAtom,
   UserBehavior,
@@ -37,19 +45,11 @@ import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPl
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Separator,
-} from "@tompi/ui";
 
 import AiHighlightPlugin, {
   AiHiglightNode,
 } from "./plugins/ai-highlight-plugin";
-import CommentPlugin, { CommentTextNode } from "./plugins/comment-plugin";
+import CommentPlugin from "./plugins/comment-plugin";
 import {
   $createCustomParagraphNode,
   CustomParagraphNode,
@@ -120,7 +120,6 @@ export default function Editor({
       LinkNode,
       MarkNode,
       AiHiglightNode,
-      CommentTextNode,
       CustomParagraphNode,
       {
         replace: ParagraphNode,

@@ -15,26 +15,15 @@ export type CommentType = {
   comment: string;
 };
 
-export const _commentsAtom = atom<CommentType[]>([
-  {
-    id: "3da02fe4-1eb7-41e9-b0a4-7ebc7f8acf7e",
-    paragraphIndex: 0,
-    comment: "This is a comment",
-  },
-  {
-    id: "146b4244-2030-4a18-be2b-238b29dcc781",
-    paragraphIndex: 1,
-    comment: "This is another comment",
-  },
-]);
+export const commentsAtom = atom<CommentType[]>([]);
 
-export const commentsAtom = splitAtom(_commentsAtom);
+// export const commentsAtom = splitAtom(_commentsAtom);
 // export const currentActiveCommentIdAtom = atom<string | null>(null);
 
 const store = createStore();
 
 export const currentActiveCommentAtom = atom((get) => {
-  const comments = get(_commentsAtom);
+  const comments = get(commentsAtom);
   const currentActiveCommentId = get(currentActiveCommentIdAtom);
   if (currentActiveCommentId === null) {
     return null;

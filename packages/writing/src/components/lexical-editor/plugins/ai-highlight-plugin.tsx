@@ -13,8 +13,12 @@ import {
 } from "lexical";
 import { ReactNode, useEffect } from "react";
 
-import { Button } from "@tompi/ui";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@tompi/ui";
+import { Button } from "@/components/ui/button";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 // import {
@@ -38,7 +42,7 @@ export class AiHiglightNode extends DecoratorNode<ReactNode> {
     correction: string,
     onAccept: () => void,
     onDecline: () => void,
-    key?: NodeKey,
+    key?: NodeKey
   ) {
     super(key);
     this.__variant = variant;
@@ -59,7 +63,7 @@ export class AiHiglightNode extends DecoratorNode<ReactNode> {
       node.__correction,
       node.__onAccept,
       node.__onDecline,
-      node.__key,
+      node.__key
     );
   }
 
@@ -143,7 +147,7 @@ export const $createAiHighlightNode = (
   text: string,
   correction: string,
   onAccept: () => void,
-  onDecline: () => void,
+  onDecline: () => void
 ) => {
   return new AiHiglightNode(variant, text, correction, onAccept, onDecline);
 };
@@ -162,7 +166,7 @@ export default function AiHighlightPlugin({
   useEffect(() => {
     if (!editor.hasNodes([AiHiglightNode])) {
       throw new Error(
-        "TwitterPlugin: TweetNode not registered on editor (initialConfig.nodes)",
+        "TwitterPlugin: TweetNode not registered on editor (initialConfig.nodes)"
       );
     }
 
@@ -199,13 +203,13 @@ export default function AiHighlightPlugin({
             editor.update(() => {
               node.replace($createTextNode(text));
             });
-          },
+          }
         );
 
         selection.insertNodes([node]);
         return true;
       },
-      COMMAND_PRIORITY_EDITOR,
+      COMMAND_PRIORITY_EDITOR
     );
   }, [editor]);
 

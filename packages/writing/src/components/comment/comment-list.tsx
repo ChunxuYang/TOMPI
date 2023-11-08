@@ -1,14 +1,24 @@
+import { useAtom, useAtomValue } from "jotai";
+import { splitAtom } from "jotai/utils";
+
 import CommentItem from "@/components/comment/comment-item";
 import { commentsAtom } from "@/stores/comments";
-import { useAtomValue } from "jotai";
 
 export default function CommentList() {
-  const comments = useAtomValue(commentsAtom);
+  const splitedComments = splitAtom(commentsAtom);
+  const [comments, dispatch] = useAtom(splitedComments);
 
   return (
     <div className="space-y-4 min-w-fit">
       {comments.map((comment, id) => (
-        <CommentItem key={id} commentAtom={comment} />
+        <CommentItem
+          key={id}
+          commentAtom={comment}
+          onRemove={() => {
+            console.log("remove");
+            dispatch({ type: "remove", atom: comment });
+          }}
+        />
       ))}
     </div>
   );

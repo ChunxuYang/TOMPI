@@ -55,11 +55,10 @@ interface EditorProps {
 }
 declare function Editor({ debugMode, onUserBehaviorChange, }: EditorProps): JSX.Element;
 
-declare function notification(message: string, data?: ExternalToast): string | number;
-declare function highlight(editor: any, text: string, highlight: string): string;
-declare const UI: {
-    notification: typeof notification;
-    highlight: typeof highlight;
+declare function useTompiUI(): {
+    notification: (message: string, data?: ExternalToast) => string | number;
+    highlight: (editor: any, text: string, highlight: string) => string;
+    comment: (paragraphIndex: number, comment: string) => void;
 };
 
-export { Editor, UI, UserBehavior, UserBehaviorCategorized };
+export { Editor, UserBehavior, UserBehaviorCategorized, useTompiUI };
