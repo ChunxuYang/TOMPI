@@ -242,7 +242,6 @@ function CommentItem({
             {
               variant: "outline",
               onClick: () => {
-                console.log("remove");
                 onRemove();
               },
               children: "Decline"
@@ -265,7 +264,6 @@ function CommentList() {
     {
       commentAtom: comment,
       onRemove: () => {
-        console.log("remove");
         dispatch({ type: "remove", atom: comment });
       }
     },
@@ -792,7 +790,7 @@ function TimeTravel() {
         clearTimeout(timeoutId);
       };
     }
-  }, [replayState, timeTravelLogs, editor]);
+  }, [replayState, timeTravelLogs, editor, playbackSpeedIndex, totalSteps]);
   return /* @__PURE__ */ jsxs4(Card, { children: [
     /* @__PURE__ */ jsxs4(CardHeader, { children: [
       /* @__PURE__ */ jsx11(CardTitle, { children: "Time Travel" }),
@@ -855,8 +853,11 @@ function TimeTravel() {
             pressed: replayState === "playing" /* Playing */,
             onPressedChange: (pressed) => {
               if (pressed) {
-                console.log("pressed");
                 setReplayState("playing" /* Playing */);
+                if (currentStepRef.current === totalSteps) {
+                  currentStepRef.current = 0;
+                  setSliderValue(0);
+                }
               } else {
                 setReplayState("idle" /* Idle */);
               }
@@ -941,7 +942,6 @@ function TimeTravelPlugin() {
     return mergeRegister2(
       editor.registerUpdateListener(({ editorState }) => {
         if (timeTraverRecorderState === "recording" /* Recording */ && timeTravelReplayerState !== "playing" /* Playing */) {
-          console.log("recording", timeTravelLogs.length);
           setTimeTravelLogs((logs) => [
             ...logs,
             {

@@ -15,7 +15,6 @@ export default function CommentList() {
           key={id}
           commentAtom={comment}
           onRemove={() => {
-            console.log("remove");
             dispatch({ type: "remove", atom: comment });
           }}
         />

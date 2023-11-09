@@ -273,7 +273,6 @@ function CommentItem({
             {
               variant: "outline",
               onClick: () => {
-                console.log("remove");
                 onRemove();
               },
               children: "Decline"
@@ -296,7 +295,6 @@ function CommentList() {
     {
       commentAtom: comment,
       onRemove: () => {
-        console.log("remove");
         dispatch({ type: "remove", atom: comment });
       }
     },
@@ -810,7 +808,7 @@ function TimeTravel() {
         clearTimeout(timeoutId);
       };
     }
-  }, [replayState, timeTravelLogs, editor]);
+  }, [replayState, timeTravelLogs, editor, playbackSpeedIndex, totalSteps]);
   return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(Card, { children: [
     /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(CardHeader, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CardTitle, { children: "Time Travel" }),
@@ -873,8 +871,11 @@ function TimeTravel() {
             pressed: replayState === "playing" /* Playing */,
             onPressedChange: (pressed) => {
               if (pressed) {
-                console.log("pressed");
                 setReplayState("playing" /* Playing */);
+                if (currentStepRef.current === totalSteps) {
+                  currentStepRef.current = 0;
+                  setSliderValue(0);
+                }
               } else {
                 setReplayState("idle" /* Idle */);
               }
@@ -959,7 +960,6 @@ function TimeTravelPlugin() {
     return (0, import_utils10.mergeRegister)(
       editor.registerUpdateListener(({ editorState }) => {
         if (timeTraverRecorderState === "recording" /* Recording */ && timeTravelReplayerState !== "playing" /* Playing */) {
-          console.log("recording", timeTravelLogs.length);
           setTimeTravelLogs((logs) => [
             ...logs,
             {

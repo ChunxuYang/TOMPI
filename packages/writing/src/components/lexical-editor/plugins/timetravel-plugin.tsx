@@ -26,7 +26,6 @@ export default function TimeTravelPlugin() {
           timeTraverRecorderState === TimeTravelRecorderState.Recording &&
           timeTravelReplayerState !== TimeTravelReplayerState.Playing
         ) {
-          console.log("recording", timeTravelLogs.length);
           setTimeTravelLogs((logs) => [
             ...logs,
             {

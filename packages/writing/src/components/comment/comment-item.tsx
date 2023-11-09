@@ -35,7 +35,6 @@ export default function CommentItem({
           <Button
             variant="outline"
             onClick={() => {
-              console.log("remove");
               onRemove();
             }}
           >

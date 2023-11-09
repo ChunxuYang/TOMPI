@@ -92,8 +92,6 @@ export default function TimeTravel() {
         //   const newStep = currentStep + 1;
         //   setCurrentStep(newStep);
 
-        //   console.log("play", newStep);
-
         //   editor.setEditorState(timeTravelLogs[newStep].editorState);
         //   play();
         // }, timeDiff / PLAYBACK_SPEEDS[playbackSpeedIndex]);
@@ -105,7 +103,7 @@ export default function TimeTravel() {
         clearTimeout(timeoutId);
       };
     }
-  }, [replayState, timeTravelLogs, editor]);
+  }, [replayState, timeTravelLogs, editor, playbackSpeedIndex, totalSteps]);
 
   return (
     <Card>
@@ -164,12 +162,12 @@ export default function TimeTravel() {
                 pressed={replayState === TimeTravelReplayerState.Playing}
                 onPressedChange={(pressed) => {
                   if (pressed) {
-                    console.log("pressed");
                     setReplayState(TimeTravelReplayerState.Playing);
 
-                    // if (currentStep === totalSteps) {
-                    //   setCurrentStep(0);
-                    // }
+                    if (currentStepRef.current === totalSteps) {
+                      currentStepRef.current = 0;
+                      setSliderValue(0);
+                    }
                   } else {
                     setReplayState(TimeTravelReplayerState.Idle);
                   }
