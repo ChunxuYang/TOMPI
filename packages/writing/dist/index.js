@@ -97,7 +97,7 @@ var import_jotai10 = require("jotai");
 var import_lexical4 = require("lexical");
 var import_next_themes = require("next-themes");
 var import_react7 = require("react");
-var import_sonner2 = require("sonner");
+var import_sonner = require("sonner");
 
 // src/components/comment/comment-list.tsx
 var import_jotai3 = require("jotai");
@@ -671,7 +671,6 @@ var import_react4 = require("react");
 // src/components/time-travel/index.tsx
 var import_jotai7 = require("jotai");
 var import_react3 = require("react");
-var import_sonner = require("sonner");
 
 // src/stores/time-travel.ts
 var import_jotai6 = require("jotai");
@@ -784,6 +783,13 @@ function TimeTravel() {
   const [editor] = (0, import_LexicalComposerContext3.useLexicalComposerContext)();
   const totalSteps = timeTravelLogs.length - 1;
   (0, import_react3.useEffect)(() => {
+    if (timeTravelState === "finished" /* Finished */) {
+      editor.setEditable(false);
+    } else {
+      editor.setEditable(true);
+    }
+  }, [timeTravelState]);
+  (0, import_react3.useEffect)(() => {
     if (replayState === "playing" /* Playing */) {
       let timeoutId;
       const play = () => {
@@ -850,7 +856,6 @@ function TimeTravel() {
           variant: "default",
           onClick: () => {
             setTimeTravelState("recording" /* Recording */);
-            (0, import_sonner.toast)("Recording in progress");
           },
           children: [
             /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_react_icons.PlayIcon, { className: "w-4 h-4 mr-2" }),
@@ -1131,7 +1136,7 @@ function Editor({
     onUserBehaviorChange == null ? void 0 : onUserBehaviorChange(userBehavior);
   }, [userBehavior]);
   return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "relative h-full overflow-auto", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_sonner2.Toaster, { position: "bottom-left", theme }),
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_sonner.Toaster, { position: "bottom-left", theme }),
     debugMode && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Card, { className: "fixed bottom-10 right-10", children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CardTitle, { children: "User Behavior" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "space-y-4", children: [
@@ -1188,11 +1193,11 @@ function Editor({
 
 // src/components/tompi-ui/index.tsx
 var import_jotai11 = require("jotai");
-var import_sonner3 = require("sonner");
+var import_sonner2 = require("sonner");
 function useTompiUI() {
   const setComments = (0, import_jotai11.useSetAtom)(commentsAtom);
   function notification(message, data) {
-    return (0, import_sonner3.toast)(message, data);
+    return (0, import_sonner2.toast)(message, data);
   }
   function highlight(editor, text, highlight2) {
     const regex = new RegExp(highlight2, "gi");

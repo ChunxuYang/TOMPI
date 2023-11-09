@@ -653,7 +653,6 @@ import { useEffect as useEffect4 } from "react";
 // src/components/time-travel/index.tsx
 import { useAtom as useAtom3 } from "jotai";
 import { useEffect as useEffect3, useRef, useState } from "react";
-import { toast } from "sonner";
 
 // src/stores/time-travel.ts
 import { atom as atom3 } from "jotai";
@@ -766,6 +765,13 @@ function TimeTravel() {
   const [editor] = useLexicalComposerContext3();
   const totalSteps = timeTravelLogs.length - 1;
   useEffect3(() => {
+    if (timeTravelState === "finished" /* Finished */) {
+      editor.setEditable(false);
+    } else {
+      editor.setEditable(true);
+    }
+  }, [timeTravelState]);
+  useEffect3(() => {
     if (replayState === "playing" /* Playing */) {
       let timeoutId;
       const play = () => {
@@ -832,7 +838,6 @@ function TimeTravel() {
           variant: "default",
           onClick: () => {
             setTimeTravelState("recording" /* Recording */);
-            toast("Recording in progress");
           },
           children: [
             /* @__PURE__ */ jsx11(PlayIcon, { className: "w-4 h-4 mr-2" }),
@@ -1170,11 +1175,11 @@ function Editor({
 
 // src/components/tompi-ui/index.tsx
 import { useSetAtom as useSetAtom3 } from "jotai";
-import { toast as toast2 } from "sonner";
+import { toast } from "sonner";
 function useTompiUI() {
   const setComments = useSetAtom3(commentsAtom);
   function notification(message, data) {
-    return toast2(message, data);
+    return toast(message, data);
   }
   function highlight(editor, text, highlight2) {
     const regex = new RegExp(highlight2, "gi");

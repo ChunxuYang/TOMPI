@@ -1,6 +1,5 @@
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 
 import {
   timeTravelLogsAtom,
@@ -36,20 +35,20 @@ export default function TimeTravel() {
   const [timeTravelLogs, setTimeTravelLogs] = useAtom(timeTravelLogsAtom);
 
   const [playbackSpeedIndex, setPlaybackSpeedIndex] = useState(2);
-  // const [currentStep, setCurrentStep] = useState<number>(0);
   const currentStepRef = useRef<number>(0);
   const [sliderValue, setSliderValue] = useState<number>(0);
-
-  // useEffect(() => {
-  //   setSliderValue(currentStepRef.current);
-  // }, [currentStepRef.current]);
-
   const [replayState, setReplayState] = useAtom(timeTravelReplayerStateAtom);
   const [editor] = useLexicalComposerContext();
 
-  // const sliderRef = useRef<HTMLInputElement>(null);
-
   const totalSteps = timeTravelLogs.length - 1;
+
+  useEffect(() => {
+    if (timeTravelState === TimeTravelRecorderState.Finished) {
+      editor.setEditable(false);
+    } else {
+      editor.setEditable(true);
+    }
+  }, [timeTravelState]);
 
   useEffect(() => {
     if (replayState === TimeTravelReplayerState.Playing) {
@@ -68,15 +67,7 @@ export default function TimeTravel() {
         const timeDiff = nextTime - currentTime;
 
         timeoutId = setTimeout(() => {
-          // currentStepRef.current++;
-          // const index = currentStepRef.current;
-
           currentStepRef.current++;
-          // const slider = sliderRef.current;
-          // if (slider !== null) {
-          //   slider.value = String(currentStepRef.current);
-          // }
-
           setSliderValue(currentStepRef.current);
 
           const newStep = currentStepRef.current;
@@ -85,16 +76,6 @@ export default function TimeTravel() {
 
           play();
         }, timeDiff / PLAYBACK_SPEEDS[playbackSpeedIndex]);
-
-        // timeoutId = setTimeout(() => {
-        //   // currentStepRef.current++;
-        //   // const index = currentStepRef.current;
-        //   const newStep = currentStep + 1;
-        //   setCurrentStep(newStep);
-
-        //   editor.setEditorState(timeTravelLogs[newStep].editorState);
-        //   play();
-        // }, timeDiff / PLAYBACK_SPEEDS[playbackSpeedIndex]);
       };
 
       play();
@@ -142,7 +123,6 @@ export default function TimeTravel() {
             variant={"default"}
             onClick={() => {
               setTimeTravelState(TimeTravelRecorderState.Recording);
-              toast("Recording in progress");
             }}
           >
             <PlayIcon className="w-4 h-4 mr-2" />
@@ -226,13 +206,6 @@ export default function TimeTravel() {
                   const index = totalSteps;
                   const editorState = timeTravelLogs[index].editorState;
                   editor.setEditorState(editorState);
-                  // setCurrentStep(index);
-                  // currentStepRef.current = index;
-                  // const slider = sliderRef.current;
-
-                  // if (slider !== null) {
-                  //   slider.value = String(index);
-                  // }
 
                   setSliderValue(index);
 
