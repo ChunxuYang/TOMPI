@@ -61,4 +61,6 @@ declare function useTompiUI(): {
     comment: (paragraphIndex: number, comment: string) => void;
 };
 
-export { Editor, UserBehavior, UserBehaviorCategorized, useTompiUI };
+declare function TimeTravel(): JSX.Element;
+
+export { Editor, TimeTravel, UserBehavior, UserBehaviorCategorized, useTompiUI };

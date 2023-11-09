@@ -54,6 +54,7 @@ import {
   $createCustomParagraphNode,
   CustomParagraphNode,
 } from "./plugins/custom-paragraph-plugin";
+import TimeTravelPlugin from "./plugins/timetravel-plugin";
 import TreeViewPlugin from "./plugins/treeview-plugin";
 import UserBehaviorDetectorPlugin from "./plugins/user-behavior-detector-plugin";
 
@@ -208,6 +209,7 @@ export default function Editor({
                 </div>
               )}
             </>
+            <TimeTravelPlugin />
           </LexicalComposer>
         </div>
 
