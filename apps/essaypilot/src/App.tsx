@@ -11,7 +11,7 @@ function App() {
   const [isDebugMode, setIsDebugMode] = React.useState(false);
   function onUserBehaviorChange(userBehavior: UserBehavior) {
     if (userBehavior.typing_speed > 10) {
-      UI.notification("Typing speed is too fast");
+      // UI.notification("Typing speed is too fast");
     }
   }
 
@@ -54,7 +54,7 @@ function App() {
           <ThemeToggle />
         </nav>
         <div className="flex-1 p-4 flex relative">
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <Editor
               debugMode={isDebugMode}
               onUserBehaviorChange={onUserBehaviorChange}
