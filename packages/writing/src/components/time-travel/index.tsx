@@ -1,4 +1,4 @@
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,7 +25,6 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Slider } from "../ui/slider";
 import { Toggle } from "../ui/toggle";
-import Replayer from "./replayer";
 
 const PLAYBACK_SPEEDS = [0.5, 0.25, 1, 2, 4];
 
