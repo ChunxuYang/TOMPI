@@ -8,6 +8,7 @@ type TimeTravelLogItemType = {
 export enum TimeTravelRecorderState {
   Idle = "idle",
   Recording = "recording",
+  Ready = "ready",
   Finished = "finished",
 }
 
