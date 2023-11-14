@@ -1,5 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import { EditorState } from "lexical";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -33,9 +34,18 @@ export default function Replayer() {
   const [pauseFormOpen, setPauseFormOpen] = useState(false);
   const setTimeTravelState = useSetAtom(timeTravelStateAtom);
 
+  const setEditorState = useCallback(
+    (editorState: EditorState) => {
+      console.log("setEditorState", editorState);
+      editor.setEditorState(editorState);
+    },
+    [editor]
+  );
+
   const totalSteps = timeTravelLogs.length - 1;
 
   useEffect(() => {
+    setEditorState(timeTravelLogs[totalSteps].editorState);
     currentStepRef.current = totalSteps;
     setSliderValue(totalSteps);
   }, [totalSteps]);
@@ -64,7 +74,7 @@ export default function Replayer() {
 
           const newStep = currentStepRef.current;
 
-          editor.setEditorState(timeTravelLogs[newStep].editorState);
+          setEditorState(timeTravelLogs[newStep].editorState);
 
           play();
         }, timeDiff / PLAYBACK_SPEEDS[playbackSpeedIndex]);
@@ -137,7 +147,7 @@ export default function Replayer() {
         onValueChange={([ind]) => {
           setSliderValue(ind);
           const editorState = timeTravelLogs[ind].editorState;
-          editor.setEditorState(editorState);
+          setEditorState(editorState);
         }}
       />
 
@@ -145,21 +155,16 @@ export default function Replayer() {
         <Button
           variant={"link"}
           onClick={() => {
-            const rootElement = editor.getRootElement();
+            const index = totalSteps;
 
-            if (rootElement !== null) {
-              rootElement.contentEditable = "true";
-              const index = totalSteps;
-
-              if (latestEditorState) {
-                editor.setEditorState(latestEditorState);
-              }
-
-              setSliderValue(index);
-
-              setReplayState(TimeTravelReplayerState.Idle);
-              setTimeTravelState(TimeTravelState.Recording);
+            if (latestEditorState) {
+              setEditorState(latestEditorState);
             }
+
+            setSliderValue(index);
+
+            setReplayState(TimeTravelReplayerState.Idle);
+            setTimeTravelState(TimeTravelState.Recording);
           }}
         >
           Exit

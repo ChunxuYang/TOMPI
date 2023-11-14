@@ -1,15 +1,10 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import {
-  $createParagraphNode,
-  $createTextNode,
-  $getRoot,
-  ParagraphNode,
-} from "lexical";
-import { useTheme } from "next-themes";
+import { $createTextNode, $getRoot, ParagraphNode } from "lexical";
 import { useEffect } from "react";
 import { Toaster } from "sonner";
+import { useLocalStorage } from "usehooks-ts";
 
 import CommentList from "@/components/comment/comment-list";
 import {
@@ -88,14 +83,12 @@ function onError(error: Error) {
   console.error(error);
 }
 
+type Theme = "light" | "dark" | "system";
+
 export default function Editor({
   debugMode = false,
   onUserBehaviorChange,
 }: EditorProps) {
-  const { theme } = useTheme() as {
-    theme: "light" | "dark" | "system";
-  };
-
   const config: InitialConfigType = {
     namespace: "lexical-editor",
     theme: {
@@ -143,7 +136,7 @@ export default function Editor({
 
   return (
     <div className="relative h-full overflow-auto">
-      <Toaster position="bottom-left" theme={theme} />
+      <Toaster position="bottom-left" />
       {debugMode && (
         <Card className="fixed bottom-10 right-10">
           <CardHeader>

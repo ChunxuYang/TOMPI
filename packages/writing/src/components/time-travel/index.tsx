@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import LogList from "./log-list";
 import Recorder from "./recorder";
 import Replayer from "./replayer";
 
@@ -20,12 +19,16 @@ export default function TimeTravel() {
   const timeTravelState = useAtomValue(timeTravelStateAtom);
 
   useEffect(() => {
-    if (timeTravelState === TimeTravelState.Replaying) {
-      editor.setEditable(false);
-    } else {
-      editor.setEditable(true);
+    const rootElement = editor.getRootElement();
+
+    if (!rootElement) {
+      return;
     }
+
+    rootElement.contentEditable =
+      timeTravelState === TimeTravelState.Replaying ? "false" : "true";
   }, [editor, timeTravelState]);
+
   return (
     <>
       <Card>

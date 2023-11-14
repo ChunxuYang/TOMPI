@@ -56,10 +56,9 @@ export default function LogList() {
                     onClick={() => {
                       // setTimeTravelLogs(log.log);
                       setCurrentTimeTravelLog(log.log);
-
                       setLatestEditorState(editor.getEditorState());
-
                       setTimeTravelState(TimeTravelState.Replaying);
+                      editor.focus();
                     }}
                   >
                     Replay

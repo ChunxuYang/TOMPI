@@ -16,7 +16,7 @@ function App() {
   }
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark">
       <main className="flex flex-col min-h-screen bg-white dark:bg-zinc-900">
         <nav className="z-20 flex items-center justify-between p-4 shadow-md bg-background sticky top-0">
           <a href="/" className="text-xl hover:text-accent-foreground">
