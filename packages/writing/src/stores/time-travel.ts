@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { focusAtom } from "jotai-optics";
 import { EditorState } from "lexical";
 
 type TimeTravelLogItemType = {
@@ -29,20 +30,67 @@ type TimeTravelSaveLogItem = {
 
 export type TimeTravelLogsType = TimeTravelLogItemType[];
 
-export const currentTimeTravelLogAtom = atom<TimeTravelLogsType>([]);
+// put above together as a single atom
+export const timeTravelAtom = atom<{
+  timeTravelState: TimeTravelState;
+  timeTravelRecorderState: TimeTravelRecorderState;
+  timeTravelReplayerState: TimeTravelReplayerState;
+  currentTimeTravelLog: TimeTravelLogsType;
+  timeTravelLogList: TimeTravelSaveLogItem[];
+  latestEditorState: EditorState | null;
+  blockThresholdInSec: number;
+}>({
+  timeTravelState: TimeTravelState.Recording,
+  timeTravelRecorderState: TimeTravelRecorderState.Idle,
+  timeTravelReplayerState: TimeTravelReplayerState.Idle,
+  currentTimeTravelLog: [],
+  timeTravelLogList: [],
+  latestEditorState: null,
+  blockThresholdInSec: 5,
+});
 
-export const timeTravelLogListAtom = atom<TimeTravelSaveLogItem[]>([]);
+// export const currentTimeTravelLogAtom = atom<TimeTravelLogsType>([]);
 
-export const timeTravelRecorderStateAtom = atom<TimeTravelRecorderState>(
-  TimeTravelRecorderState.Idle
+// export const timeTravelLogListAtom = atom<TimeTravelSaveLogItem[]>([]);
+
+// export const timeTravelRecorderStateAtom = atom<TimeTravelRecorderState>(
+//   TimeTravelRecorderState.Idle
+// );
+
+// export const timeTravelReplayerStateAtom = atom<TimeTravelReplayerState>(
+//   TimeTravelReplayerState.Idle
+// );
+
+// export const timeTravelStateAtom = atom<TimeTravelState>(
+//   TimeTravelState.Recording
+// );
+
+// export const latestEditorStateAtom = atom<EditorState | null>(null);
+// use focusAtom to export all the atoms
+export const currentTimeTravelLogAtom = focusAtom(timeTravelAtom, (optic) =>
+  optic.prop("currentTimeTravelLog")
 );
 
-export const timeTravelReplayerStateAtom = atom<TimeTravelReplayerState>(
-  TimeTravelReplayerState.Idle
+export const timeTravelLogListAtom = focusAtom(timeTravelAtom, (optic) =>
+  optic.prop("timeTravelLogList")
 );
 
-export const timeTravelStateAtom = atom<TimeTravelState>(
-  TimeTravelState.Recording
+export const timeTravelRecorderStateAtom = focusAtom(timeTravelAtom, (optic) =>
+  optic.prop("timeTravelRecorderState")
 );
 
-export const latestEditorStateAtom = atom<EditorState | null>(null);
+export const timeTravelReplayerStateAtom = focusAtom(timeTravelAtom, (optic) =>
+  optic.prop("timeTravelReplayerState")
+);
+
+export const timeTravelStateAtom = focusAtom(timeTravelAtom, (optic) =>
+  optic.prop("timeTravelState")
+);
+
+export const latestEditorStateAtom = focusAtom(timeTravelAtom, (optic) =>
+  optic.prop("latestEditorState")
+);
+
+export const blockThresholdInSecAtom = focusAtom(timeTravelAtom, (optic) =>
+  optic.prop("blockThresholdInSec")
+);

@@ -1,22 +1,32 @@
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
 
-import { TimeTravelState, timeTravelStateAtom } from "@/stores/time-travel";
+import {
+  blockThresholdInSecAtom,
+  TimeTravelState,
+  timeTravelStateAtom,
+} from "@/stores/time-travel";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { Label } from "@radix-ui/react-label";
 
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { Input } from "../ui/input";
 import Recorder from "./recorder";
 import Replayer from "./replayer";
 
 export default function TimeTravel() {
   const [editor] = useLexicalComposerContext();
   const timeTravelState = useAtomValue(timeTravelStateAtom);
+  const [blockThresholdInSec, setBlockThresholdInSec] = useAtom(
+    blockThresholdInSecAtom
+  );
 
   useEffect(() => {
     const rootElement = editor.getRootElement();
@@ -44,6 +54,22 @@ export default function TimeTravel() {
             }[timeTravelState]
           }
         </CardContent>
+        <CardFooter>
+          <div className="flex flex-col space-y-2 w-full">
+            <Label htmlFor="blockThresholdInSec">
+              Block Threshold (in sec)
+            </Label>
+            <Input
+              id="blockThresholdInSec"
+              type="number"
+              placeholder="Block Threshold"
+              value={blockThresholdInSec}
+              onChange={(e) => {
+                setBlockThresholdInSec(Number(e.target.value));
+              }}
+            />
+          </div>
+        </CardFooter>
       </Card>
     </>
   );

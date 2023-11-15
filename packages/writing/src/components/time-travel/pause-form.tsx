@@ -14,7 +14,6 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "../ui/sheet";
 
 interface PauseFormProps {
@@ -24,7 +23,12 @@ interface PauseFormProps {
 
 export default function PauseForm({ open, onOpenChange }: PauseFormProps) {
   return (
-    <Sheet defaultOpen={false} open={open} onOpenChange={onOpenChange}>
+    <Sheet
+      defaultOpen={false}
+      open={open}
+      onOpenChange={onOpenChange}
+      modal={false}
+    >
       {/* <SheetTrigger asChild>{trigger}</SheetTrigger> */}
       <SheetContent className="flex flex-col text-left h-screen">
         <SheetHeader>
@@ -33,14 +37,6 @@ export default function PauseForm({ open, onOpenChange }: PauseFormProps) {
           </SheetTitle>
           <SheetDescription>Click on the possibilites below.</SheetDescription>
         </SheetHeader>
-        {/* Planning:
-          Generating ideas to write about:  	Highly unlikely 1 2 3 4 5 6 7 Highly likely
-          Organizing ideas to write about:  	Highly unlikely 1 2 3 4 5 6 7 Highly likely
-          Setting the writing goal: 	     	Highly unlikely 1 2 3 4 5 6 7 Highly likely
-        Translating: 				     	Highly unlikely 1 2 3 4 5 6 7 Highly likely
-          Reviewing	
-          Evaluating written text: 		Highly unlikely 1 2 3 4 5 6 7 Highly likely
-          Revising written text:			Highly unlikely 1 2 3 4 5 6 7 Highly likely */}
         <Tabs defaultValue="step-1" className="w-full flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="step-1">Step 1</TabsTrigger>

@@ -90,7 +90,7 @@ export default function Replayer() {
 
   return (
     <div className="flex flex-col space-y-2 w-full">
-      <PauseForm open={pauseFormOpen} onOpenChange={setPauseFormOpen} />
+      <PauseForm open={true} onOpenChange={setPauseFormOpen} />
 
       <div className="grid grid-cols-3 items-center">
         <Toggle
