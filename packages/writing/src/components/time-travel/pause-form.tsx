@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -19,9 +20,14 @@ import {
 interface PauseFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onClose: () => void;
 }
 
-export default function PauseForm({ open, onOpenChange }: PauseFormProps) {
+export default function PauseForm({
+  open,
+  onOpenChange,
+  onClose,
+}: PauseFormProps) {
   return (
     <Sheet
       defaultOpen={false}
@@ -132,7 +138,9 @@ export default function PauseForm({ open, onOpenChange }: PauseFormProps) {
         </Tabs>
 
         <SheetFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit" onClick={onClose}>
+            Save changes
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

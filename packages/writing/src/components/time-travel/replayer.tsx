@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Toggle } from "@/components/ui/toggle";
 import {
+  blockThresholdInSecAtom,
   currentTimeTravelLogAtom,
   latestEditorStateAtom,
   TimeTravelReplayerState,
@@ -33,6 +34,8 @@ export default function Replayer() {
   const currentStepRef = useRef<number>(0);
   const [pauseFormOpen, setPauseFormOpen] = useState(false);
   const setTimeTravelState = useSetAtom(timeTravelStateAtom);
+
+  const blockThresholdInSec = useAtomValue(blockThresholdInSecAtom);
 
   const setEditorState = useCallback(
     (editorState: EditorState) => {
@@ -68,6 +71,13 @@ export default function Replayer() {
         const nextTime = timeTravelLogs[currentStep + 1].time;
         const timeDiff = nextTime - currentTime;
 
+        if (timeDiff > blockThresholdInSec * 1000) {
+          console.log("timeDiff", timeDiff, blockThresholdInSec * 1000);
+          setPauseFormOpen(true);
+          setReplayState(TimeTravelReplayerState.Idle);
+          return;
+        }
+
         timeoutId = setTimeout(() => {
           currentStepRef.current++;
           setSliderValue(currentStepRef.current);
@@ -86,11 +96,27 @@ export default function Replayer() {
         clearTimeout(timeoutId);
       };
     }
-  }, [replayState, timeTravelLogs, editor, playbackSpeedIndex, totalSteps]);
+  }, [
+    replayState,
+    timeTravelLogs,
+    editor,
+    playbackSpeedIndex,
+    totalSteps,
+    blockThresholdInSec,
+  ]);
 
   return (
     <div className="flex flex-col space-y-2 w-full">
-      <PauseForm open={true} onOpenChange={setPauseFormOpen} />
+      <PauseForm
+        open={pauseFormOpen}
+        onOpenChange={setPauseFormOpen}
+        onClose={() => {
+          setPauseFormOpen(false);
+          currentStepRef.current++;
+          setSliderValue(currentStepRef.current);
+          setReplayState(TimeTravelReplayerState.Playing);
+        }}
+      />
 
       <div className="grid grid-cols-3 items-center">
         <Toggle

@@ -1345,7 +1345,11 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 // src/components/time-travel/pause-form.tsx
 var import_jsx_runtime20 = require("react/jsx-runtime");
-function PauseForm({ open, onOpenChange }) {
+function PauseForm({
+  open,
+  onOpenChange,
+  onClose
+}) {
   return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
     Sheet,
     {
@@ -1437,7 +1441,7 @@ function PauseForm({ open, onOpenChange }) {
             ] }) }) })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SheetFooter, { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Button, { type: "submit", children: "Save changes" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SheetFooter, { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Button, { type: "submit", onClick: onClose, children: "Save changes" }) })
       ] })
     }
   );
@@ -1455,6 +1459,7 @@ function Replayer() {
   const currentStepRef = (0, import_react5.useRef)(0);
   const [pauseFormOpen, setPauseFormOpen] = (0, import_react5.useState)(false);
   const setTimeTravelState = (0, import_jotai9.useSetAtom)(timeTravelStateAtom);
+  const blockThresholdInSec = (0, import_jotai9.useAtomValue)(blockThresholdInSecAtom);
   const setEditorState = (0, import_react5.useCallback)(
     (editorState) => {
       console.log("setEditorState", editorState);
@@ -1481,6 +1486,12 @@ function Replayer() {
         const currentTime = timeTravelLogs[currentStep].time;
         const nextTime = timeTravelLogs[currentStep + 1].time;
         const timeDiff = nextTime - currentTime;
+        if (timeDiff > blockThresholdInSec * 1e3) {
+          console.log("timeDiff", timeDiff, blockThresholdInSec * 1e3);
+          setPauseFormOpen(true);
+          setReplayState("idle" /* Idle */);
+          return;
+        }
         timeoutId = setTimeout(() => {
           currentStepRef.current++;
           setSliderValue(currentStepRef.current);
@@ -1494,9 +1505,28 @@ function Replayer() {
         clearTimeout(timeoutId);
       };
     }
-  }, [replayState, timeTravelLogs, editor, playbackSpeedIndex, totalSteps]);
+  }, [
+    replayState,
+    timeTravelLogs,
+    editor,
+    playbackSpeedIndex,
+    totalSteps,
+    blockThresholdInSec
+  ]);
   return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "flex flex-col space-y-2 w-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(PauseForm, { open: true, onOpenChange: setPauseFormOpen }),
+    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+      PauseForm,
+      {
+        open: pauseFormOpen,
+        onOpenChange: setPauseFormOpen,
+        onClose: () => {
+          setPauseFormOpen(false);
+          currentStepRef.current++;
+          setSliderValue(currentStepRef.current);
+          setReplayState("playing" /* Playing */);
+        }
+      }
+    ),
     /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "grid grid-cols-3 items-center", children: [
       /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
         Toggle,
