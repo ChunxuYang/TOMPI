@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Input } from "../ui/input";
+import PauseForm from "./pause-form";
 import Recorder from "./recorder";
 import Replayer from "./replayer";
 
@@ -41,6 +42,7 @@ export default function TimeTravel() {
 
   return (
     <>
+      <PauseForm open={true} onOpenChange={() => {}} onClose={() => {}} />
       <Card>
         <CardHeader>
           <CardTitle>Time Travel</CardTitle>

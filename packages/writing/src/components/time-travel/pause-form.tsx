@@ -1,9 +1,19 @@
-import React from "react";
-import { toast } from "sonner";
+import { useAtom } from "jotai";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  blockAiAssistanceFeedbackAnnotationAtom,
+  blockAiAssistanceIdeasAnnotationAtom,
+  blockAiAssistanceOtherAnnotationAtom,
+  blockPlanningGeneratingStageAnnotationAtom,
+  blockPlanningOrganizingStageAnnotationAtom,
+  blockPlanningSettingStageAnnotationAtom,
+  blockReviewingEvaluatingStageAnnotationAtom,
+  blockReviewingRevisingStageAnnotationAtom,
+  blockTranslatingStageAnnotationAtom,
+} from "@/stores/block";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 import GridSelect from "../grid-select";
 import { Button } from "../ui/button";
@@ -16,6 +26,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "../ui/sheet";
+import { Textarea } from "../ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface PauseFormProps {
   open: boolean;
@@ -28,6 +45,7 @@ export default function PauseForm({
   onOpenChange,
   onClose,
 }: PauseFormProps) {
+  const [other, setOther] = useAtom(blockAiAssistanceOtherAnnotationAtom);
   return (
     <Sheet
       defaultOpen={false}
@@ -36,105 +54,121 @@ export default function PauseForm({
       modal={false}
     >
       {/* <SheetTrigger asChild>{trigger}</SheetTrigger> */}
-      <SheetContent className="flex flex-col text-left h-screen">
-        <SheetHeader>
-          <SheetTitle>
-            What was your mental state when you were blocked?
-          </SheetTitle>
-          <SheetDescription>Click on the possibilites below.</SheetDescription>
-        </SheetHeader>
-        <Tabs defaultValue="step-1" className="w-full flex-1 flex flex-col">
+      <SheetContent className="text-left overflow-auto">
+        <Tabs defaultValue="step-1" className="w-full flex flex-col">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="step-1">Step 1</TabsTrigger>
             <TabsTrigger value="step-2">Step 2</TabsTrigger>
           </TabsList>
 
-          <ScrollArea className="flex-1 max-h-[600px] pr-4">
-            <TabsContent value="step-1" className="flex-1 flex flex-col">
-              <div className="flex flex-col space-y-4 mt-4 mb-4">
-                <Label className="text-xl">Planning</Label>
-                <ul className="space-y-4 list-disc">
-                  {[
-                    "Generating ideas to write about",
-                    "Organizing ideas to write about",
-                    "Setting the writing goal",
-                  ].map((item, index) => (
-                    <li key={index}>
-                      <GridSelect
-                        label={item}
-                        options={["1", "2", "3", "4", "5", "6", "7"]}
-                        value={"1"}
-                        onChange={(value) => {}}
-                        leftIndication="Highly unlikely"
-                        rightIndication="Highly likely"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="flex flex-col space-y-4 mt-4 mb-4">
-                <Label className="text-xl">Translating</Label>
-                <ul className="space-y-4">
+          <TabsContent value="step-1" className="flex-1 flex flex-col">
+            <div className="flex flex-col space-y-4 mt-4 mb-4">
+              <Label className="text-xl">Planning</Label>
+              <ul className="space-y-4">
+                <li>
                   <GridSelect
-                    options={["1", "2", "3", "4", "5", "6", "7"]}
-                    value={"1"}
-                    onChange={(value) => {}}
-                    leftIndication="Highly unlikely"
-                    rightIndication="Highly likely"
+                    atom={blockPlanningGeneratingStageAnnotationAtom}
+                    label="Generating ideas to write about"
                   />
-                </ul>
-              </div>
+                </li>
+                <li>
+                  <GridSelect
+                    atom={blockPlanningOrganizingStageAnnotationAtom}
+                    label="Organizing ideas to write about"
+                  />
+                </li>
+                <li>
+                  <GridSelect
+                    atom={blockPlanningSettingStageAnnotationAtom}
+                    label="Setting the writing goal"
+                  />
+                </li>
+              </ul>
+            </div>
 
-              <div className="flex flex-col space-y-4 mt-4 mb-4">
-                <Label className="text-xl">Reviewing</Label>
-                <ul className="space-y-4 list-disc">
-                  {["Evaluating written text", "Revising written text"].map(
-                    (item, index) => (
-                      <li key={index}>
-                        <GridSelect
-                          label={item}
-                          options={["1", "2", "3", "4", "5", "6", "7"]}
-                          value={"1"}
-                          onChange={(value) => {}}
-                          leftIndication="Highly unlikely"
-                          rightIndication="Highly likely"
-                        />
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </TabsContent>
-            <TabsContent value="step-2">
-              <ScrollArea className="flex-1 pr-4">
-                <div className="flex flex-col space-y-4 mt-4 mb-4">
-                  <Label className="text-xl">
-                    What kinds of AI assistance can help with this block?
-                  </Label>
+            <div className="flex flex-col space-y-4 mt-4 mb-4">
+              <div className="flex flex-row items-center space-x-2">
+                <Label className="text-xl">Translating</Label>
+                <TooltipProvider>
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                      <Button size={"icon"} variant={"link"}>
+                        <InfoCircledIcon className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
 
-                  <ul className="space-y-4 list-disc">
-                    {[
-                      "AI suggests ideas to write about, e.g., “<response from AI>”",
-                      "AI helps complete the sentence you are writing, e.g., “<response from AI>”",
-                      "AI provides feedback to the sentence you are writing, e.g., “<response from AI>”",
-                    ].map((item, index) => (
-                      <li key={index}>
-                        <GridSelect
-                          label={item}
-                          options={["1", "2", "3", "4", "5", "6", "7"]}
-                          value={"1"}
-                          onChange={(value) => {}}
-                          leftIndication="Highly unlikely"
-                          rightIndication="Highly likely"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </ScrollArea>
-            </TabsContent>
-          </ScrollArea>
+                    <TooltipContent>
+                      <span className="italic">Translating</span> ideas and
+                      goals into written words and sentences;
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <ul className="space-y-4">
+                <GridSelect atom={blockTranslatingStageAnnotationAtom} />
+              </ul>
+            </div>
+
+            <div className="flex flex-col space-y-4 mt-4 mb-4">
+              <Label className="text-xl">Reviewing</Label>
+              <ul className="space-y-4">
+                <li>
+                  <GridSelect
+                    label="Evaluating written text"
+                    atom={blockReviewingEvaluatingStageAnnotationAtom}
+                  />
+                </li>
+                <li>
+                  <GridSelect
+                    label="Revising written text"
+                    atom={blockReviewingRevisingStageAnnotationAtom}
+                  />
+                </li>
+              </ul>
+            </div>
+          </TabsContent>
+          <TabsContent value="step-2">
+            <div className="flex flex-col space-y-4 mt-4 mb-4">
+              <Label className="text-xl">
+                What kinds of AI assistance can help with this block?
+              </Label>
+
+              <ul className="space-y-4">
+                <li>
+                  <GridSelect
+                    label="AI suggests ideas to write about, e.g., “<response from AI>”"
+                    atom={blockAiAssistanceIdeasAnnotationAtom}
+                  />
+                </li>
+                <li>
+                  <GridSelect
+                    label="AI helps complete the sentence you are writing, e.g., “<response from AI>”"
+                    atom={blockAiAssistanceIdeasAnnotationAtom}
+                  />
+                </li>
+                <li>
+                  <GridSelect
+                    label="AI provides feedback to the sentence you are writing, e.g., “<response from AI>”"
+                    atom={blockAiAssistanceFeedbackAnnotationAtom}
+                  />
+                </li>
+                <li>
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="custom-ai-support">
+                      Others, please specify
+                    </Label>
+                    <Textarea
+                      id="custom-ai-support"
+                      value={other}
+                      onChange={(e) => {
+                        setOther(e.currentTarget.value);
+                      }}
+                    />
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </TabsContent>
         </Tabs>
 
         <SheetFooter>

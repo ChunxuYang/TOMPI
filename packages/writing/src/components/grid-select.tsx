@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Atom, SetStateAction, useAtom, WritableAtom } from "jotai";
 
 import {
   Tooltip,
@@ -10,27 +10,15 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
 
 import { Button } from "./ui/button";
-import { Toggle } from "./ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 export interface GridSelectProps {
   label?: string;
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
-  leftIndication?: string;
-  rightIndication?: string;
+  atom: WritableAtom<number, [SetStateAction<number>], void>;
 }
 
-export default function GridSelect({
-  label,
-  options,
-  value,
-  onChange,
-  leftIndication,
-  rightIndication,
-}: GridSelectProps) {
-  const [selected, setSelected] = useState<string>(value);
-
+export default function GridSelect({ label, atom }: GridSelectProps) {
+  const [value, setValue] = useAtom(atom);
   return (
     <div className="flex flex-col space-y-3">
       {label && (
@@ -51,31 +39,36 @@ export default function GridSelect({
       )}
 
       <div className="space-y-1">
-        <div className={`flex flex-row divide-solid divide-x border rounded`}>
-          {options.map((option, index) => (
-            <Toggle
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          size={"sm"}
+          value={value ? value.toString() : ""}
+          onValueChange={(value) => {
+            setValue(parseInt(value));
+          }}
+        >
+          {[1, 2, 3, 4, 5, 6, 7].map((option, index) => (
+            <ToggleGroupItem
               key={index}
-              variant={"outline"}
-              className={`rounded-none flex flex-1 justify-center items-center`}
-              pressed={selected === option}
-              onPressedChange={(pressed) => {
-                if (pressed) {
-                  setSelected(option);
-                  onChange(option);
-                }
-              }}
+              // pressed={selected === option}
+              value={option.toString()}
+              // onPressedChange={(pressed) => {
+              //   if (pressed) {
+              //     setSelected(option);
+              //     onChange(option);
+              //   }
+              // }}
             >
               {option}
-            </Toggle>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
         <div className="flex flex-row justify-between">
           <Label className="text-xs text-muted-foreground">
-            {leftIndication}
+            Highly unlikely
           </Label>
-          <Label className="text-xs text-muted-foreground">
-            {rightIndication}
-          </Label>
+          <Label className="text-xs text-muted-foreground">Highly likely</Label>
         </div>
       </div>
     </div>
