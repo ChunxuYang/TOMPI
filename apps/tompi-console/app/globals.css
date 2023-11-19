@@ -74,3 +74,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+.paper {
+  background-color: #000000;
+background-image:  linear-gradient(#212121 2px, transparent 2px), linear-gradient(90deg, #212121 2px, transparent 2px), linear-gradient(#212121 1px, transparent 1px), linear-gradient(90deg, #212121 1px, #000000 1px);
+background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
