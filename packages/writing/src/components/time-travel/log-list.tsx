@@ -1,9 +1,9 @@
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 
 import {
   currentTimeTravelLogAtom,
   latestEditorStateAtom,
-  timeTravelLogListAtom,
+  TimeTravelSaveLogItem,
   TimeTravelState,
   timeTravelStateAtom,
 } from "@/stores/time-travel";
@@ -19,19 +19,29 @@ import {
   TableRow,
 } from "../ui/table";
 
-export default function LogList() {
+interface LogListProps {
+  logList: TimeTravelSaveLogItem[];
+  onDeleteLog: (id: string) => void;
+  onAddLog: (log: TimeTravelSaveLogItem) => void;
+}
+
+export default function LogList({
+  logList,
+  onDeleteLog,
+  onAddLog,
+}: LogListProps) {
   const [editor] = useLexicalComposerContext();
   const setLatestEditorState = useSetAtom(latestEditorStateAtom);
-  const [timeTravelLogList, setTimeTravelLogList] = useAtom(
-    timeTravelLogListAtom
-  );
+  // const [timeTravelLogList, setTimeTravelLogList] = useAtom(
+  //   timeTravelLogListAtom
+  // );
 
   const setTimeTravelState = useSetAtom(timeTravelStateAtom);
   const setCurrentTimeTravelLog = useSetAtom(currentTimeTravelLogAtom);
 
   return (
     <div className="flex flex-col space-y-2 w-full">
-      {timeTravelLogList.length === 0 ? (
+      {logList.length === 0 ? (
         <div className="text-center text-muted-foreground text-sm">
           No logs yet.
         </div>
@@ -45,7 +55,7 @@ export default function LogList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {timeTravelLogList.map((log, index) => (
+            {logList.map((log, index) => (
               <TableRow key={index}>
                 <TableCell>{new Date(log.saveTime).toLocaleString()}</TableCell>
                 <TableCell>{log.log.length} Actions</TableCell>
@@ -67,9 +77,7 @@ export default function LogList() {
                     className="px-0"
                     variant={"link"}
                     onClick={() => {
-                      setTimeTravelLogList((prev) =>
-                        prev.filter((_, i) => i !== index)
-                      );
+                      onDeleteLog(log.id);
                     }}
                   >
                     Delete

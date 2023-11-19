@@ -4,7 +4,6 @@ import { useAtomValue } from "jotai";
 import { $createTextNode, $getRoot, ParagraphNode } from "lexical";
 import { useEffect } from "react";
 import { Toaster } from "sonner";
-import { useLocalStorage } from "usehooks-ts";
 
 import CommentList from "@/components/comment/comment-list";
 import {
@@ -49,7 +48,9 @@ import {
   $createCustomParagraphNode,
   CustomParagraphNode,
 } from "./plugins/custom-paragraph-plugin";
-import TimeTravelPlugin from "./plugins/timetravel-plugin";
+import TimeTravelPlugin, {
+  TimeTravelConfiguration,
+} from "./plugins/timetravel-plugin";
 import TreeViewPlugin from "./plugins/treeview-plugin";
 import UserBehaviorDetectorPlugin from "./plugins/user-behavior-detector-plugin";
 
@@ -77,6 +78,7 @@ function prepopulatedRichText() {
 interface EditorProps {
   debugMode?: boolean;
   onUserBehaviorChange?: (behavior: UserBehavior) => void;
+  timeTravelConfiguration?: TimeTravelConfiguration;
 }
 
 function onError(error: Error) {
@@ -88,6 +90,7 @@ type Theme = "light" | "dark" | "system";
 export default function Editor({
   debugMode = false,
   onUserBehaviorChange,
+  timeTravelConfiguration,
 }: EditorProps) {
   const config: InitialConfigType = {
     namespace: "lexical-editor",
@@ -202,7 +205,11 @@ export default function Editor({
                 </div>
               )}
             </>
-            <TimeTravelPlugin />
+            <>
+              {timeTravelConfiguration && (
+                <TimeTravelPlugin configuration={timeTravelConfiguration} />
+              )}
+            </>
           </LexicalComposer>
         </div>
 

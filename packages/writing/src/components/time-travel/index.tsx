@@ -9,6 +9,7 @@ import {
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { Label } from "@radix-ui/react-label";
 
+import { TimeTravelConfiguration } from "../lexical-editor/plugins/timetravel-plugin";
 import {
   Card,
   CardContent,
@@ -18,11 +19,14 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Input } from "../ui/input";
-import PauseForm from "./pause-form";
 import Recorder from "./recorder";
 import Replayer from "./replayer";
 
-export default function TimeTravel() {
+export default function TimeTravel({
+  configuration,
+}: {
+  configuration: TimeTravelConfiguration;
+}) {
   const [editor] = useLexicalComposerContext();
   const timeTravelState = useAtomValue(timeTravelStateAtom);
   const [blockThresholdInSec, setBlockThresholdInSec] = useAtom(
@@ -40,9 +44,13 @@ export default function TimeTravel() {
       timeTravelState === TimeTravelState.Replaying ? "false" : "true";
   }, [editor, timeTravelState]);
 
+  if (!configuration || !configuration.enabled) {
+    return null;
+  }
+
   return (
     <>
-      <PauseForm open={true} onOpenChange={() => {}} onClose={() => {}} />
+      {/* <PauseForm open={true} onOpenChange={() => {}} onClose={() => {}} /> */}
       <Card>
         <CardHeader>
           <CardTitle>Time Travel</CardTitle>
@@ -51,7 +59,9 @@ export default function TimeTravel() {
         <CardContent className="flex justify-between items-center space-x-2">
           {
             {
-              [TimeTravelState.Recording]: <Recorder />,
+              [TimeTravelState.Recording]: (
+                <Recorder timeTravelConfiguration={configuration} />
+              ),
               [TimeTravelState.Replaying]: <Replayer />,
             }[timeTravelState]
           }

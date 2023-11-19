@@ -8,3 +8,11 @@ export {
   type UserBehavior,
   type UserBehaviorCategorized,
 } from "./stores/user-behavior";
+
+export {
+  type TimeTravelLogsType,
+  type TimeTravelSaveLogListType,
+  type TimeTravelSaveLogItem,
+} from "./stores/time-travel";
+
+export { type TimeTravelConfiguration } from "./components/lexical-editor/plugins/timetravel-plugin";

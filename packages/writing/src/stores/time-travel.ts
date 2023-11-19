@@ -23,12 +23,15 @@ export enum TimeTravelReplayerState {
   Finished = "finished",
 }
 
-type TimeTravelSaveLogItem = {
+export type TimeTravelSaveLogItem = {
+  id: string;
   saveTime: number;
   log: TimeTravelLogsType;
 };
 
 export type TimeTravelLogsType = TimeTravelLogItemType[];
+
+export type TimeTravelSaveLogListType = TimeTravelSaveLogItem[];
 
 // put above together as a single atom
 export const timeTravelAtom = atom<{
@@ -36,7 +39,6 @@ export const timeTravelAtom = atom<{
   timeTravelRecorderState: TimeTravelRecorderState;
   timeTravelReplayerState: TimeTravelReplayerState;
   currentTimeTravelLog: TimeTravelLogsType;
-  timeTravelLogList: TimeTravelSaveLogItem[];
   latestEditorState: EditorState | null;
   blockThresholdInSec: number;
 }>({
@@ -44,7 +46,6 @@ export const timeTravelAtom = atom<{
   timeTravelRecorderState: TimeTravelRecorderState.Idle,
   timeTravelReplayerState: TimeTravelReplayerState.Idle,
   currentTimeTravelLog: [],
-  timeTravelLogList: [],
   latestEditorState: null,
   blockThresholdInSec: 5,
 });
@@ -69,10 +70,6 @@ export const timeTravelAtom = atom<{
 // use focusAtom to export all the atoms
 export const currentTimeTravelLogAtom = focusAtom(timeTravelAtom, (optic) =>
   optic.prop("currentTimeTravelLog")
-);
-
-export const timeTravelLogListAtom = focusAtom(timeTravelAtom, (optic) =>
-  optic.prop("timeTravelLogList")
 );
 
 export const timeTravelRecorderStateAtom = focusAtom(timeTravelAtom, (optic) =>

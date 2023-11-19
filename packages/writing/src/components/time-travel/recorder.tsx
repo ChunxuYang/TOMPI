@@ -1,10 +1,8 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 import {
-  latestEditorStateAtom,
-  timeTravelLogListAtom,
   TimeTravelLogsType,
   TimeTravelRecorderState,
   timeTravelRecorderStateAtom,
@@ -13,17 +11,22 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { mergeRegister } from "@lexical/utils";
 import { PlayIcon, StopIcon } from "@radix-ui/react-icons";
 
+import { TimeTravelConfiguration } from "../lexical-editor/plugins/timetravel-plugin";
 import { Button } from "../ui/button";
 import LogList from "./log-list";
 
-export default function Recorder() {
+interface RecorderProps {
+  timeTravelConfiguration: TimeTravelConfiguration;
+}
+
+export default function Recorder({ timeTravelConfiguration }: RecorderProps) {
   const [editor] = useLexicalComposerContext();
 
   const [timeTravelRecorderState, setTimeTravelRecorderState] = useAtom(
     timeTravelRecorderStateAtom
   );
 
-  const setTimeTravelLogList = useSetAtom(timeTravelLogListAtom);
+  // const setTimeTravelLogList = useSetAtom(timeTravelLogListAtom);
 
   const currentTimeTravelLogs = useRef<TimeTravelLogsType>([]);
 
@@ -64,13 +67,19 @@ export default function Recorder() {
           onClick={() => {
             setTimeTravelRecorderState(TimeTravelRecorderState.Idle);
 
-            setTimeTravelLogList((prev) => [
-              ...prev,
-              {
-                saveTime: Date.now(),
-                log: currentTimeTravelLogs.current,
-              },
-            ]);
+            // setTimeTravelLogList((prev) => [
+            //   ...prev,
+            //   {
+            //     saveTime: Date.now(),
+            //     log: currentTimeTravelLogs.current,
+            //   },
+            // ]);
+
+            timeTravelConfiguration.onAddLog({
+              id: Math.random().toString(),
+              saveTime: Date.now(),
+              log: currentTimeTravelLogs.current,
+            });
 
             toast.success("Recording saved.");
           }}
@@ -79,7 +88,11 @@ export default function Recorder() {
           Stop Recording
         </Button>
       )}
-      <LogList />
+      <LogList
+        logList={timeTravelConfiguration.logsList}
+        onDeleteLog={timeTravelConfiguration.onDeleteLog}
+        onAddLog={timeTravelConfiguration.onAddLog}
+      />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { EditorState } from 'lexical';
 import { ExternalToast } from 'sonner';
 
 /**
@@ -49,11 +50,32 @@ type UserBehaviorCategorized = {
     prob_distraction: ProbDistraction;
 };
 
+type TimeTravelLogItemType = {
+    time: number;
+    editorState: EditorState;
+};
+type TimeTravelSaveLogItem = {
+    id: string;
+    saveTime: number;
+    log: TimeTravelLogsType;
+};
+type TimeTravelLogsType = TimeTravelLogItemType[];
+type TimeTravelSaveLogListType = TimeTravelSaveLogItem[];
+
+interface TimeTravelConfiguration {
+    enabled: boolean;
+    logsList: TimeTravelSaveLogListType;
+    onAddLog: (log: TimeTravelSaveLogItem) => void;
+    onUpdateLog: (id: string, log: TimeTravelSaveLogItem) => void;
+    onDeleteLog: (id: string) => void;
+}
+
 interface EditorProps {
     debugMode?: boolean;
     onUserBehaviorChange?: (behavior: UserBehavior) => void;
+    timeTravelConfiguration?: TimeTravelConfiguration;
 }
-declare function Editor({ debugMode, onUserBehaviorChange, }: EditorProps): JSX.Element;
+declare function Editor({ debugMode, onUserBehaviorChange, timeTravelConfiguration, }: EditorProps): JSX.Element;
 
 declare function useTompiUI(): {
     notification: (message: string, data?: ExternalToast) => string | number;
@@ -61,6 +83,8 @@ declare function useTompiUI(): {
     comment: (paragraphIndex: number, comment: string) => void;
 };
 
-declare function TimeTravel(): JSX.Element;
+declare function TimeTravel({ configuration, }: {
+    configuration: TimeTravelConfiguration;
+}): JSX.Element | null;
 
-export { Editor, TimeTravel, UserBehavior, UserBehaviorCategorized, useTompiUI };
+export { Editor, TimeTravel, TimeTravelConfiguration, TimeTravelLogsType, TimeTravelSaveLogItem, TimeTravelSaveLogListType, UserBehavior, UserBehaviorCategorized, useTompiUI };

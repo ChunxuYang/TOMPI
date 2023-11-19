@@ -72,7 +72,6 @@ export default function Replayer() {
         const timeDiff = nextTime - currentTime;
 
         if (timeDiff > blockThresholdInSec * 1000) {
-          console.log("timeDiff", timeDiff, blockThresholdInSec * 1000);
           setPauseFormOpen(true);
           setReplayState(TimeTravelReplayerState.Idle);
           return;
