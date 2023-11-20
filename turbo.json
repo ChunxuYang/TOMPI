@@ -11,9 +11,6 @@
     },
     "lint": {},
     "dev": {
-      "dotEnv": [
-        ".env.local"
-      ],
       "persistent": true,
       "cache": false
     }
