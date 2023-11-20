@@ -1876,7 +1876,7 @@ var Editor = ({
   const config = {
     namespace: "lexical-editor",
     theme: {
-      root: "prose dark:prose-invert lg:prose-xl focus:outline-none flex-1 mx-auto",
+      root: "prose dark:prose-invert lg:prose-xl focus:outline-none flex-1 mx-auto h-full",
       link: "cursor-pointer",
       placeholder: "text-gray-400",
       text: {

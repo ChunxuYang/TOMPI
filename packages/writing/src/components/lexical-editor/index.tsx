@@ -30,6 +30,7 @@ import {
   InitialConfigType,
   LexicalComposer,
 } from "@lexical/react/LexicalComposer";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
@@ -95,7 +96,7 @@ const Editor: React.FC<EditorProps> = ({
   const config: InitialConfigType = {
     namespace: "lexical-editor",
     theme: {
-      root: "prose dark:prose-invert lg:prose-xl focus:outline-none flex-1 mx-auto",
+      root: "prose dark:prose-invert lg:prose-xl focus:outline-none flex-1 mx-auto h-full",
       link: "cursor-pointer",
       placeholder: "text-gray-400",
       text: {
