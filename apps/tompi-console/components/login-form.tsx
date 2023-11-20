@@ -60,7 +60,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
       callbackUrl: "/",
     });
 
-    console.log(username.current, password.current);
+    // console.log(username.current, password.current);
 
     setIsLoading(false);
   }

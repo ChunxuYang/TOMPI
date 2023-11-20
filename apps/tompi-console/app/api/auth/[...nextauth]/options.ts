@@ -3,8 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-import { login } from "@/lib/auth";
-
 // import GithubProvider from "next-auth/providers/github";
 
 export const options: NextAuthOptions = {
@@ -21,23 +19,7 @@ export const options: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        console.log("credentials", credentials);
-        if (!credentials || !credentials?.username || !credentials?.password) {
-          return null;
-        }
-
-        const user = await login(
-          credentials?.username,
-          credentials?.password
-        ).catch((error) => {
-          console.error(error);
-          return null;
-        });
-
-        if (user) {
-          return user;
-        }
-        return null;
+        throw new Error("Please contact Chunxu for inner access.");
       },
     }),
     GithubProvider({
