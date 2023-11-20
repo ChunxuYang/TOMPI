@@ -1868,11 +1868,11 @@ function prepopulatedRichText() {
 function onError(error) {
   console.error(error);
 }
-function Editor({
+var Editor = ({
   debugMode = false,
   onUserBehaviorChange,
   timeTravelConfiguration
-}) {
+}) => {
   const config = {
     namespace: "lexical-editor",
     theme: {
@@ -1969,7 +1969,8 @@ function Editor({
       /* @__PURE__ */ jsx26(CommentList, {})
     ] })
   ] });
-}
+};
+var lexical_editor_default = Editor;
 
 // src/components/tompi-ui/index.tsx
 import { useSetAtom as useSetAtom4 } from "jotai";
@@ -2005,7 +2006,7 @@ function useTompiUI() {
 }
 var tompi_ui_default = useTompiUI;
 export {
-  Editor,
+  lexical_editor_default as Editor,
   TimeTravel,
   tompi_ui_default as useTompiUI
 };

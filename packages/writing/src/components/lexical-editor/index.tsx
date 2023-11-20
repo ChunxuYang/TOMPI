@@ -75,7 +75,7 @@ function prepopulatedRichText() {
   }
 }
 
-interface EditorProps {
+export interface EditorProps {
   debugMode?: boolean;
   onUserBehaviorChange?: (behavior: UserBehavior) => void;
   timeTravelConfiguration?: TimeTravelConfiguration;
@@ -87,11 +87,11 @@ function onError(error: Error) {
 
 type Theme = "light" | "dark" | "system";
 
-export default function Editor({
+const Editor: React.FC<EditorProps> = ({
   debugMode = false,
   onUserBehaviorChange,
   timeTravelConfiguration,
-}: EditorProps) {
+}) => {
   const config: InitialConfigType = {
     namespace: "lexical-editor",
     theme: {
@@ -218,4 +218,6 @@ export default function Editor({
       </div>
     </div>
   );
-}
+};
+
+export default Editor;

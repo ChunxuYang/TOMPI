@@ -1,11 +1,11 @@
 "use client";
 
-// import { Editor } from "@tompi/writing";
 import dynamic from "next/dynamic";
 
 import { useTimeTravelLogs } from "@/utils/time-travel-log";
+import { EditorProps } from "@tompi/writing";
 
-const Editor = dynamic(
+const Editor = dynamic<EditorProps>(
   () => import("@tompi/writing").then((mod) => mod.Editor),
   {
     ssr: false,

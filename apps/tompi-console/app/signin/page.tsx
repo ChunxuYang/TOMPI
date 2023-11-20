@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { LoginForm } from "@/components/login-form";
 import TypeWriter from "@/components/type-writer";
@@ -41,7 +42,15 @@ export default function InitPage() {
               for a preset account.
             </p>
           </div>
-          <LoginForm />
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center h-64">
+                Loading...
+              </div>
+            }
+          >
+            <LoginForm />
+          </Suspense>
           {/* <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
             <Link

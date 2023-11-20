@@ -75,7 +75,7 @@ interface EditorProps {
     onUserBehaviorChange?: (behavior: UserBehavior) => void;
     timeTravelConfiguration?: TimeTravelConfiguration;
 }
-declare function Editor({ debugMode, onUserBehaviorChange, timeTravelConfiguration, }: EditorProps): JSX.Element;
+declare const Editor: React.FC<EditorProps>;
 
 declare function useTompiUI(): {
     notification: (message: string, data?: ExternalToast) => string | number;
@@ -87,4 +87,4 @@ declare function TimeTravel({ configuration, }: {
     configuration: TimeTravelConfiguration;
 }): JSX.Element | null;
 
-export { Editor, TimeTravel, TimeTravelConfiguration, TimeTravelLogsType, TimeTravelSaveLogItem, TimeTravelSaveLogListType, UserBehavior, UserBehaviorCategorized, useTompiUI };
+export { Editor, EditorProps, TimeTravel, TimeTravelConfiguration, TimeTravelLogsType, TimeTravelSaveLogItem, TimeTravelSaveLogListType, UserBehavior, UserBehaviorCategorized, useTompiUI };

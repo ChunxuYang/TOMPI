@@ -60,7 +60,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var src_exports = {};
 __export(src_exports, {
-  Editor: () => Editor,
+  Editor: () => lexical_editor_default,
   TimeTravel: () => TimeTravel,
   useTompiUI: () => tompi_ui_default
 });
@@ -1890,11 +1890,11 @@ function prepopulatedRichText() {
 function onError(error) {
   console.error(error);
 }
-function Editor({
+var Editor = ({
   debugMode = false,
   onUserBehaviorChange,
   timeTravelConfiguration
-}) {
+}) => {
   const config = {
     namespace: "lexical-editor",
     theme: {
@@ -1991,7 +1991,8 @@ function Editor({
       /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(CommentList, {})
     ] })
   ] });
-}
+};
+var lexical_editor_default = Editor;
 
 // src/components/tompi-ui/index.tsx
 var import_jotai16 = require("jotai");
