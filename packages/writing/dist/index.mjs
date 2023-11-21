@@ -254,7 +254,7 @@ import { jsx as jsx4 } from "react/jsx-runtime";
 function CommentList() {
   const splitedComments = splitAtom(commentsAtom);
   const [comments, dispatch] = useAtom2(splitedComments);
-  return /* @__PURE__ */ jsx4("div", { className: "space-y-4 min-w-fit", children: comments.map((comment, id) => /* @__PURE__ */ jsx4(
+  return comments.length > 0 ? /* @__PURE__ */ jsx4("div", { className: "space-y-4 min-w-fit", children: comments.map((comment, id) => /* @__PURE__ */ jsx4(
     CommentItem,
     {
       commentAtom: comment,
@@ -263,32 +263,8 @@ function CommentList() {
       }
     },
     id
-  )) });
+  )) }) : null;
 }
-
-// src/components/ui/separator.tsx
-import * as React3 from "react";
-import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import { jsx as jsx5 } from "react/jsx-runtime";
-var Separator = React3.forwardRef(
-  (_a, ref) => {
-    var _b = _a, { className, orientation = "horizontal", decorative = true } = _b, props = __objRest(_b, ["className", "orientation", "decorative"]);
-    return /* @__PURE__ */ jsx5(
-      SeparatorPrimitive.Root,
-      __spreadValues({
-        ref,
-        decorative,
-        orientation,
-        className: cn(
-          "shrink-0 bg-border",
-          orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]",
-          className
-        )
-      }, props)
-    );
-  }
-);
-Separator.displayName = SeparatorPrimitive.Root.displayName;
 
 // src/stores/user-behavior.ts
 import { atom as atom2 } from "jotai";
@@ -353,14 +329,14 @@ import {
 import { useEffect } from "react";
 
 // src/components/ui/hover-card.tsx
-import * as React4 from "react";
+import * as React3 from "react";
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
-import { jsx as jsx6 } from "react/jsx-runtime";
+import { jsx as jsx5 } from "react/jsx-runtime";
 var HoverCard = HoverCardPrimitive.Root;
 var HoverCardTrigger = HoverCardPrimitive.Trigger;
-var HoverCardContent = React4.forwardRef((_a, ref) => {
+var HoverCardContent = React3.forwardRef((_a, ref) => {
   var _b = _a, { className, align = "center", sideOffset = 4 } = _b, props = __objRest(_b, ["className", "align", "sideOffset"]);
-  return /* @__PURE__ */ jsx6(
+  return /* @__PURE__ */ jsx5(
     HoverCardPrimitive.Content,
     __spreadValues({
       ref,
@@ -377,7 +353,7 @@ HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
 
 // src/components/lexical-editor/plugins/ai-highlight-plugin.tsx
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { jsx as jsx7, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx6, jsxs as jsxs2 } from "react/jsx-runtime";
 var TOGGLE_AI_HIGHLIGHT_COMMAND = createCommand();
 var AiHiglightNode = class _AiHiglightNode extends DecoratorNode {
   constructor(variant, text, correction, onAccept, onDecline, key) {
@@ -423,17 +399,17 @@ var AiHiglightNode = class _AiHiglightNode extends DecoratorNode {
         break;
     }
     return /* @__PURE__ */ jsxs2(HoverCard, { openDelay: 0, closeDelay: 200, children: [
-      /* @__PURE__ */ jsx7(HoverCardTrigger, { asChild: true, children: /* @__PURE__ */ jsx7("span", { className: textCN, contentEditable: false, children: this.__text }) }),
+      /* @__PURE__ */ jsx6(HoverCardTrigger, { asChild: true, children: /* @__PURE__ */ jsx6("span", { className: textCN, contentEditable: false, children: this.__text }) }),
       /* @__PURE__ */ jsxs2(HoverCardContent, { className: "space-y-4", children: [
         /* @__PURE__ */ jsxs2("div", { className: "text-sm", children: [
           "... ",
-          /* @__PURE__ */ jsx7("span", { className: "text-green-600", children: this.__correction }),
+          /* @__PURE__ */ jsx6("span", { className: "text-green-600", children: this.__correction }),
           " ",
-          /* @__PURE__ */ jsx7("span", { className: "text-red-600 line-through", children: this.__text }),
+          /* @__PURE__ */ jsx6("span", { className: "text-red-600 line-through", children: this.__text }),
           " ..."
         ] }),
         /* @__PURE__ */ jsxs2("div", { className: "flex items-center gap-2", contentEditable: false, children: [
-          /* @__PURE__ */ jsx7(
+          /* @__PURE__ */ jsx6(
             Button,
             {
               size: "sm",
@@ -443,7 +419,7 @@ var AiHiglightNode = class _AiHiglightNode extends DecoratorNode {
               children: "Accept"
             }
           ),
-          /* @__PURE__ */ jsx7(
+          /* @__PURE__ */ jsx6(
             Button,
             {
               size: "sm",
@@ -686,12 +662,12 @@ import { useLexicalComposerContext as useLexicalComposerContext6 } from "@lexica
 import { Label as Label3 } from "@radix-ui/react-label";
 
 // src/components/ui/input.tsx
-import * as React5 from "react";
-import { jsx as jsx8 } from "react/jsx-runtime";
-var Input = React5.forwardRef(
+import * as React4 from "react";
+import { jsx as jsx7 } from "react/jsx-runtime";
+var Input = React4.forwardRef(
   (_a, ref) => {
     var _b = _a, { className, type } = _b, props = __objRest(_b, ["className", "type"]);
-    return /* @__PURE__ */ jsx8(
+    return /* @__PURE__ */ jsx7(
       "input",
       __spreadValues({
         type,
@@ -719,11 +695,11 @@ import { useSetAtom } from "jotai";
 import { useLexicalComposerContext as useLexicalComposerContext3 } from "@lexical/react/LexicalComposerContext";
 
 // src/components/ui/table.tsx
-import * as React6 from "react";
-import { jsx as jsx9 } from "react/jsx-runtime";
-var Table = React6.forwardRef((_a, ref) => {
+import * as React5 from "react";
+import { jsx as jsx8 } from "react/jsx-runtime";
+var Table = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9("div", { className: "relative w-full overflow-auto", children: /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx8("div", { className: "relative w-full overflow-auto", children: /* @__PURE__ */ jsx8(
     "table",
     __spreadValues({
       ref,
@@ -732,14 +708,14 @@ var Table = React6.forwardRef((_a, ref) => {
   ) });
 });
 Table.displayName = "Table";
-var TableHeader = React6.forwardRef((_a, ref) => {
+var TableHeader = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9("thead", __spreadValues({ ref, className: cn("[&_tr]:border-b", className) }, props));
+  return /* @__PURE__ */ jsx8("thead", __spreadValues({ ref, className: cn("[&_tr]:border-b", className) }, props));
 });
 TableHeader.displayName = "TableHeader";
-var TableBody = React6.forwardRef((_a, ref) => {
+var TableBody = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx8(
     "tbody",
     __spreadValues({
       ref,
@@ -748,9 +724,9 @@ var TableBody = React6.forwardRef((_a, ref) => {
   );
 });
 TableBody.displayName = "TableBody";
-var TableFooter = React6.forwardRef((_a, ref) => {
+var TableFooter = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx8(
     "tfoot",
     __spreadValues({
       ref,
@@ -759,9 +735,9 @@ var TableFooter = React6.forwardRef((_a, ref) => {
   );
 });
 TableFooter.displayName = "TableFooter";
-var TableRow = React6.forwardRef((_a, ref) => {
+var TableRow = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx8(
     "tr",
     __spreadValues({
       ref,
@@ -773,9 +749,9 @@ var TableRow = React6.forwardRef((_a, ref) => {
   );
 });
 TableRow.displayName = "TableRow";
-var TableHead = React6.forwardRef((_a, ref) => {
+var TableHead = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx8(
     "th",
     __spreadValues({
       ref,
@@ -787,9 +763,9 @@ var TableHead = React6.forwardRef((_a, ref) => {
   );
 });
 TableHead.displayName = "TableHead";
-var TableCell = React6.forwardRef((_a, ref) => {
+var TableCell = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx8(
     "td",
     __spreadValues({
       ref,
@@ -801,9 +777,9 @@ var TableCell = React6.forwardRef((_a, ref) => {
   );
 });
 TableCell.displayName = "TableCell";
-var TableCaption = React6.forwardRef((_a, ref) => {
+var TableCaption = React5.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx8(
     "caption",
     __spreadValues({
       ref,
@@ -814,7 +790,7 @@ var TableCaption = React6.forwardRef((_a, ref) => {
 TableCaption.displayName = "TableCaption";
 
 // src/components/time-travel/log-list.tsx
-import { jsx as jsx10, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx9, jsxs as jsxs3 } from "react/jsx-runtime";
 function LogList({
   logList,
   onDeleteLog,
@@ -824,20 +800,20 @@ function LogList({
   const setLatestEditorState = useSetAtom(latestEditorStateAtom);
   const setTimeTravelState = useSetAtom(timeTravelStateAtom);
   const setCurrentTimeTravelLog = useSetAtom(currentTimeTravelLogAtom);
-  return /* @__PURE__ */ jsx10("div", { className: "flex flex-col space-y-2 w-full", children: logList.length === 0 ? /* @__PURE__ */ jsx10("div", { className: "text-center text-muted-foreground text-sm", children: "No logs yet." }) : /* @__PURE__ */ jsxs3(Table, { children: [
-    /* @__PURE__ */ jsx10(TableHeader, { children: /* @__PURE__ */ jsxs3(TableRow, { children: [
-      /* @__PURE__ */ jsx10(TableHead, { children: "Save Time" }),
-      /* @__PURE__ */ jsx10(TableHead, { children: "Length" }),
-      /* @__PURE__ */ jsx10(TableHead, { children: "Actions" })
+  return /* @__PURE__ */ jsx9("div", { className: "flex flex-col space-y-2 w-full", children: logList.length === 0 ? /* @__PURE__ */ jsx9("div", { className: "text-center text-muted-foreground text-sm", children: "No logs yet." }) : /* @__PURE__ */ jsxs3(Table, { children: [
+    /* @__PURE__ */ jsx9(TableHeader, { children: /* @__PURE__ */ jsxs3(TableRow, { children: [
+      /* @__PURE__ */ jsx9(TableHead, { children: "Save Time" }),
+      /* @__PURE__ */ jsx9(TableHead, { children: "Length" }),
+      /* @__PURE__ */ jsx9(TableHead, { children: "Actions" })
     ] }) }),
-    /* @__PURE__ */ jsx10(TableBody, { children: logList.map((log, index) => /* @__PURE__ */ jsxs3(TableRow, { children: [
-      /* @__PURE__ */ jsx10(TableCell, { children: new Date(log.saveTime).toLocaleString() }),
+    /* @__PURE__ */ jsx9(TableBody, { children: logList.map((log, index) => /* @__PURE__ */ jsxs3(TableRow, { children: [
+      /* @__PURE__ */ jsx9(TableCell, { children: new Date(log.saveTime).toLocaleString() }),
       /* @__PURE__ */ jsxs3(TableCell, { children: [
         log.log.length,
         " Actions"
       ] }),
       /* @__PURE__ */ jsxs3(TableCell, { className: "flex space-x-2", children: [
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx9(
           Button,
           {
             className: "px-0",
@@ -851,7 +827,7 @@ function LogList({
             children: "Replay"
           }
         ),
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx9(
           Button,
           {
             className: "px-0",
@@ -868,7 +844,7 @@ function LogList({
 }
 
 // src/components/time-travel/recorder.tsx
-import { jsx as jsx11, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx10, jsxs as jsxs4 } from "react/jsx-runtime";
 function Recorder({ timeTravelConfiguration }) {
   const [editor] = useLexicalComposerContext4();
   const [timeTravelRecorderState, setTimeTravelRecorderState] = useAtom3(
@@ -900,7 +876,7 @@ function Recorder({ timeTravelConfiguration }) {
           setTimeTravelRecorderState("recording" /* Recording */);
         },
         children: [
-          /* @__PURE__ */ jsx11(PlayIcon, { className: "w-4 h-4 mr-2" }),
+          /* @__PURE__ */ jsx10(PlayIcon, { className: "w-4 h-4 mr-2" }),
           "Start Recording"
         ]
       }
@@ -919,12 +895,12 @@ function Recorder({ timeTravelConfiguration }) {
           toast.success("Recording saved.");
         },
         children: [
-          /* @__PURE__ */ jsx11(StopIcon, { className: "w-4 h-4 mr-2" }),
+          /* @__PURE__ */ jsx10(StopIcon, { className: "w-4 h-4 mr-2" }),
           "Stop Recording"
         ]
       }
     ),
-    /* @__PURE__ */ jsx11(
+    /* @__PURE__ */ jsx10(
       LogList,
       {
         logList: timeTravelConfiguration.logsList,
@@ -940,16 +916,16 @@ import { useAtom as useAtom6, useAtomValue as useAtomValue4, useSetAtom as useSe
 import { useCallback, useEffect as useEffect4, useRef as useRef2, useState } from "react";
 
 // src/components/ui/label.tsx
-import * as React7 from "react";
+import * as React6 from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva as cva2 } from "class-variance-authority";
-import { jsx as jsx12 } from "react/jsx-runtime";
+import { jsx as jsx11 } from "react/jsx-runtime";
 var labelVariants = cva2(
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 );
-var Label = React7.forwardRef((_a, ref) => {
+var Label = React6.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx12(
+  return /* @__PURE__ */ jsx11(
     LabelPrimitive.Root,
     __spreadValues({
       ref,
@@ -960,10 +936,10 @@ var Label = React7.forwardRef((_a, ref) => {
 Label.displayName = LabelPrimitive.Root.displayName;
 
 // src/components/ui/slider.tsx
-import * as React8 from "react";
+import * as React7 from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
-import { jsx as jsx13, jsxs as jsxs5 } from "react/jsx-runtime";
-var Slider = React8.forwardRef((_a, ref) => {
+import { jsx as jsx12, jsxs as jsxs5 } from "react/jsx-runtime";
+var Slider = React7.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
   return /* @__PURE__ */ jsxs5(
     SliderPrimitive.Root,
@@ -975,8 +951,8 @@ var Slider = React8.forwardRef((_a, ref) => {
       )
     }, props), {
       children: [
-        /* @__PURE__ */ jsx13(SliderPrimitive.Track, { className: "relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20", children: /* @__PURE__ */ jsx13(SliderPrimitive.Range, { className: "absolute h-full bg-primary" }) }),
-        /* @__PURE__ */ jsx13(SliderPrimitive.Thumb, { className: "block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" })
+        /* @__PURE__ */ jsx12(SliderPrimitive.Track, { className: "relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20", children: /* @__PURE__ */ jsx12(SliderPrimitive.Range, { className: "absolute h-full bg-primary" }) }),
+        /* @__PURE__ */ jsx12(SliderPrimitive.Thumb, { className: "block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" })
       ]
     })
   );
@@ -984,10 +960,10 @@ var Slider = React8.forwardRef((_a, ref) => {
 Slider.displayName = SliderPrimitive.Root.displayName;
 
 // src/components/ui/toggle.tsx
-import * as React9 from "react";
+import * as React8 from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import { cva as cva3 } from "class-variance-authority";
-import { jsx as jsx14 } from "react/jsx-runtime";
+import { jsx as jsx13 } from "react/jsx-runtime";
 var toggleVariants = cva3(
   "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground",
   {
@@ -1008,9 +984,9 @@ var toggleVariants = cva3(
     }
   }
 );
-var Toggle = React9.forwardRef((_a, ref) => {
+var Toggle = React8.forwardRef((_a, ref) => {
   var _b = _a, { className, variant, size } = _b, props = __objRest(_b, ["className", "variant", "size"]);
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx13(
     TogglePrimitive.Root,
     __spreadValues({
       ref,
@@ -1028,13 +1004,13 @@ import { PlayIcon as PlayIcon2, ReloadIcon, StopIcon as StopIcon2 } from "@radix
 import { useAtom as useAtom5 } from "jotai";
 
 // src/components/ui/tabs.tsx
-import * as React10 from "react";
+import * as React9 from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { jsx as jsx15 } from "react/jsx-runtime";
+import { jsx as jsx14 } from "react/jsx-runtime";
 var Tabs = TabsPrimitive.Root;
-var TabsList = React10.forwardRef((_a, ref) => {
+var TabsList = React9.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx14(
     TabsPrimitive.List,
     __spreadValues({
       ref,
@@ -1046,9 +1022,9 @@ var TabsList = React10.forwardRef((_a, ref) => {
   );
 });
 TabsList.displayName = TabsPrimitive.List.displayName;
-var TabsTrigger = React10.forwardRef((_a, ref) => {
+var TabsTrigger = React9.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx14(
     TabsPrimitive.Trigger,
     __spreadValues({
       ref,
@@ -1060,9 +1036,9 @@ var TabsTrigger = React10.forwardRef((_a, ref) => {
   );
 });
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
-var TabsContent = React10.forwardRef((_a, ref) => {
+var TabsContent = React9.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx14(
     TabsPrimitive.Content,
     __spreadValues({
       ref,
@@ -1163,15 +1139,15 @@ import { InfoCircledIcon as InfoCircledIcon2 } from "@radix-ui/react-icons";
 import { useAtom as useAtom4 } from "jotai";
 
 // src/components/ui/tooltip.tsx
-import * as React11 from "react";
+import * as React10 from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { jsx as jsx16 } from "react/jsx-runtime";
+import { jsx as jsx15 } from "react/jsx-runtime";
 var TooltipProvider = TooltipPrimitive.Provider;
 var Tooltip = TooltipPrimitive.Root;
 var TooltipTrigger = TooltipPrimitive.Trigger;
-var TooltipContent = React11.forwardRef((_a, ref) => {
+var TooltipContent = React10.forwardRef((_a, ref) => {
   var _b = _a, { className, sideOffset = 4 } = _b, props = __objRest(_b, ["className", "sideOffset"]);
-  return /* @__PURE__ */ jsx16(
+  return /* @__PURE__ */ jsx15(
     TooltipPrimitive.Content,
     __spreadValues({
       ref,
@@ -1190,30 +1166,30 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Label as Label2 } from "@radix-ui/react-label";
 
 // src/components/ui/toggle-group.tsx
-import * as React12 from "react";
+import * as React11 from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import { jsx as jsx17 } from "react/jsx-runtime";
-var ToggleGroupContext = React12.createContext({
+import { jsx as jsx16 } from "react/jsx-runtime";
+var ToggleGroupContext = React11.createContext({
   size: "default",
   variant: "default"
 });
-var ToggleGroup = React12.forwardRef((_a, ref) => {
+var ToggleGroup = React11.forwardRef((_a, ref) => {
   var _b = _a, { className, variant, size, children } = _b, props = __objRest(_b, ["className", "variant", "size", "children"]);
-  return /* @__PURE__ */ jsx17(
+  return /* @__PURE__ */ jsx16(
     ToggleGroupPrimitive.Root,
     __spreadProps(__spreadValues({
       ref,
       className: cn("flex items-center justify-center gap-1", className)
     }, props), {
-      children: /* @__PURE__ */ jsx17(ToggleGroupContext.Provider, { value: { variant, size }, children })
+      children: /* @__PURE__ */ jsx16(ToggleGroupContext.Provider, { value: { variant, size }, children })
     })
   );
 });
 ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
-var ToggleGroupItem = React12.forwardRef((_a, ref) => {
+var ToggleGroupItem = React11.forwardRef((_a, ref) => {
   var _b = _a, { className, children, variant, size } = _b, props = __objRest(_b, ["className", "children", "variant", "size"]);
-  const context = React12.useContext(ToggleGroupContext);
-  return /* @__PURE__ */ jsx17(
+  const context = React11.useContext(ToggleGroupContext);
+  return /* @__PURE__ */ jsx16(
     ToggleGroupPrimitive.Item,
     __spreadProps(__spreadValues({
       ref,
@@ -1232,19 +1208,19 @@ var ToggleGroupItem = React12.forwardRef((_a, ref) => {
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
 // src/components/grid-select.tsx
-import { jsx as jsx18, jsxs as jsxs6 } from "react/jsx-runtime";
+import { jsx as jsx17, jsxs as jsxs6 } from "react/jsx-runtime";
 function GridSelect({ label, atom: atom5 }) {
   const [value, setValue] = useAtom4(atom5);
   return /* @__PURE__ */ jsxs6("div", { className: "flex flex-col space-y-3", children: [
-    label && /* @__PURE__ */ jsx18(TooltipProvider, { children: /* @__PURE__ */ jsxs6("div", { className: "flex flex-row items-center", children: [
-      /* @__PURE__ */ jsx18(Label2, { children: label }),
+    label && /* @__PURE__ */ jsx17(TooltipProvider, { children: /* @__PURE__ */ jsxs6("div", { className: "flex flex-row items-center", children: [
+      /* @__PURE__ */ jsx17(Label2, { children: label }),
       /* @__PURE__ */ jsxs6(Tooltip, { delayDuration: 100, children: [
-        /* @__PURE__ */ jsx18(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsx18(Button, { size: "icon", variant: "link", children: /* @__PURE__ */ jsx18(InfoCircledIcon, { className: "w-4 h-4" }) }) }),
-        /* @__PURE__ */ jsx18(TooltipContent, { children: label })
+        /* @__PURE__ */ jsx17(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsx17(Button, { size: "icon", variant: "link", children: /* @__PURE__ */ jsx17(InfoCircledIcon, { className: "w-4 h-4" }) }) }),
+        /* @__PURE__ */ jsx17(TooltipContent, { children: label })
       ] })
     ] }) }),
     /* @__PURE__ */ jsxs6("div", { className: "space-y-1", children: [
-      /* @__PURE__ */ jsx18(
+      /* @__PURE__ */ jsx17(
         ToggleGroup,
         {
           type: "single",
@@ -1254,7 +1230,7 @@ function GridSelect({ label, atom: atom5 }) {
           onValueChange: (value2) => {
             setValue(parseInt(value2));
           },
-          children: [1, 2, 3, 4, 5, 6, 7].map((option, index) => /* @__PURE__ */ jsx18(
+          children: [1, 2, 3, 4, 5, 6, 7].map((option, index) => /* @__PURE__ */ jsx17(
             ToggleGroupItem,
             {
               value: option.toString(),
@@ -1265,19 +1241,19 @@ function GridSelect({ label, atom: atom5 }) {
         }
       ),
       /* @__PURE__ */ jsxs6("div", { className: "flex flex-row justify-between", children: [
-        /* @__PURE__ */ jsx18(Label2, { className: "text-xs text-muted-foreground", children: "Highly unlikely" }),
-        /* @__PURE__ */ jsx18(Label2, { className: "text-xs text-muted-foreground", children: "Highly likely" })
+        /* @__PURE__ */ jsx17(Label2, { className: "text-xs text-muted-foreground", children: "Highly unlikely" }),
+        /* @__PURE__ */ jsx17(Label2, { className: "text-xs text-muted-foreground", children: "Highly likely" })
       ] })
     ] })
   ] });
 }
 
 // src/components/ui/sheet.tsx
-import * as React13 from "react";
+import * as React12 from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { cva as cva4 } from "class-variance-authority";
-import { jsx as jsx19, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx18, jsxs as jsxs7 } from "react/jsx-runtime";
 var Sheet = SheetPrimitive.Root;
 var SheetPortal = (_a) => {
   var _b = _a, {
@@ -1285,12 +1261,12 @@ var SheetPortal = (_a) => {
   } = _b, props = __objRest(_b, [
     "className"
   ]);
-  return /* @__PURE__ */ jsx19(SheetPrimitive.Portal, __spreadValues({ className: cn(className) }, props));
+  return /* @__PURE__ */ jsx18(SheetPrimitive.Portal, __spreadValues({ className: cn(className) }, props));
 };
 SheetPortal.displayName = SheetPrimitive.Portal.displayName;
-var SheetOverlay = React13.forwardRef((_a, ref) => {
+var SheetOverlay = React12.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsx18(
     SheetPrimitive.Overlay,
     __spreadProps(__spreadValues({
       className: cn(
@@ -1319,10 +1295,10 @@ var sheetVariants = cva4(
     }
   }
 );
-var SheetContent = React13.forwardRef((_a, ref) => {
+var SheetContent = React12.forwardRef((_a, ref) => {
   var _b = _a, { side = "right", className, children } = _b, props = __objRest(_b, ["side", "className", "children"]);
   return /* @__PURE__ */ jsxs7(SheetPortal, { children: [
-    /* @__PURE__ */ jsx19(SheetOverlay, {}),
+    /* @__PURE__ */ jsx18(SheetOverlay, {}),
     /* @__PURE__ */ jsxs7(
       SheetPrimitive.Content,
       __spreadProps(__spreadValues({
@@ -1332,8 +1308,8 @@ var SheetContent = React13.forwardRef((_a, ref) => {
         children: [
           children,
           /* @__PURE__ */ jsxs7(SheetPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary", children: [
-            /* @__PURE__ */ jsx19(Cross2Icon, { className: "h-4 w-4" }),
-            /* @__PURE__ */ jsx19("span", { className: "sr-only", children: "Close" })
+            /* @__PURE__ */ jsx18(Cross2Icon, { className: "h-4 w-4" }),
+            /* @__PURE__ */ jsx18("span", { className: "sr-only", children: "Close" })
           ] })
         ]
       })
@@ -1347,7 +1323,7 @@ var SheetHeader = (_a) => {
   } = _b, props = __objRest(_b, [
     "className"
   ]);
-  return /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsx18(
     "div",
     __spreadValues({
       className: cn(
@@ -1364,7 +1340,7 @@ var SheetFooter = (_a) => {
   } = _b, props = __objRest(_b, [
     "className"
   ]);
-  return /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsx18(
     "div",
     __spreadValues({
       className: cn(
@@ -1375,9 +1351,9 @@ var SheetFooter = (_a) => {
   );
 };
 SheetFooter.displayName = "SheetFooter";
-var SheetTitle = React13.forwardRef((_a, ref) => {
+var SheetTitle = React12.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsx18(
     SheetPrimitive.Title,
     __spreadValues({
       ref,
@@ -1386,9 +1362,9 @@ var SheetTitle = React13.forwardRef((_a, ref) => {
   );
 });
 SheetTitle.displayName = SheetPrimitive.Title.displayName;
-var SheetDescription = React13.forwardRef((_a, ref) => {
+var SheetDescription = React12.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsx18(
     SheetPrimitive.Description,
     __spreadValues({
       ref,
@@ -1399,12 +1375,12 @@ var SheetDescription = React13.forwardRef((_a, ref) => {
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 // src/components/ui/textarea.tsx
-import * as React14 from "react";
-import { jsx as jsx20 } from "react/jsx-runtime";
-var Textarea = React14.forwardRef(
+import * as React13 from "react";
+import { jsx as jsx19 } from "react/jsx-runtime";
+var Textarea = React13.forwardRef(
   (_a, ref) => {
     var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-    return /* @__PURE__ */ jsx20(
+    return /* @__PURE__ */ jsx19(
       "textarea",
       __spreadValues({
         className: cn(
@@ -1419,14 +1395,14 @@ var Textarea = React14.forwardRef(
 Textarea.displayName = "Textarea";
 
 // src/components/time-travel/pause-form.tsx
-import { jsx as jsx21, jsxs as jsxs8 } from "react/jsx-runtime";
+import { jsx as jsx20, jsxs as jsxs8 } from "react/jsx-runtime";
 function PauseForm({
   open,
   onOpenChange,
   onClose
 }) {
   const [other, setOther] = useAtom5(blockAiAssistanceOtherAnnotationAtom);
-  return /* @__PURE__ */ jsx21(
+  return /* @__PURE__ */ jsx20(
     Sheet,
     {
       defaultOpen: false,
@@ -1436,28 +1412,28 @@ function PauseForm({
       children: /* @__PURE__ */ jsxs8(SheetContent, { className: "text-left overflow-auto", children: [
         /* @__PURE__ */ jsxs8(Tabs, { defaultValue: "step-1", className: "w-full flex flex-col", children: [
           /* @__PURE__ */ jsxs8(TabsList, { className: "grid w-full grid-cols-2", children: [
-            /* @__PURE__ */ jsx21(TabsTrigger, { value: "step-1", children: "Step 1" }),
-            /* @__PURE__ */ jsx21(TabsTrigger, { value: "step-2", children: "Step 2" })
+            /* @__PURE__ */ jsx20(TabsTrigger, { value: "step-1", children: "Step 1" }),
+            /* @__PURE__ */ jsx20(TabsTrigger, { value: "step-2", children: "Step 2" })
           ] }),
           /* @__PURE__ */ jsxs8(TabsContent, { value: "step-1", className: "flex-1 flex flex-col", children: [
             /* @__PURE__ */ jsxs8("div", { className: "flex flex-col space-y-4 mt-4 mb-4", children: [
-              /* @__PURE__ */ jsx21(Label, { className: "text-xl", children: "Planning" }),
+              /* @__PURE__ */ jsx20(Label, { className: "text-xl", children: "Planning" }),
               /* @__PURE__ */ jsxs8("ul", { className: "space-y-4", children: [
-                /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+                /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                   GridSelect,
                   {
                     atom: blockPlanningGeneratingStageAnnotationAtom,
                     label: "Generating ideas to write about"
                   }
                 ) }),
-                /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+                /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                   GridSelect,
                   {
                     atom: blockPlanningOrganizingStageAnnotationAtom,
                     label: "Organizing ideas to write about"
                   }
                 ) }),
-                /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+                /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                   GridSelect,
                   {
                     atom: blockPlanningSettingStageAnnotationAtom,
@@ -1468,28 +1444,28 @@ function PauseForm({
             ] }),
             /* @__PURE__ */ jsxs8("div", { className: "flex flex-col space-y-4 mt-4 mb-4", children: [
               /* @__PURE__ */ jsxs8("div", { className: "flex flex-row items-center space-x-2", children: [
-                /* @__PURE__ */ jsx21(Label, { className: "text-xl", children: "Translating" }),
-                /* @__PURE__ */ jsx21(TooltipProvider, { children: /* @__PURE__ */ jsxs8(Tooltip, { delayDuration: 100, children: [
-                  /* @__PURE__ */ jsx21(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsx21(Button, { size: "icon", variant: "link", children: /* @__PURE__ */ jsx21(InfoCircledIcon2, { className: "w-4 h-4" }) }) }),
+                /* @__PURE__ */ jsx20(Label, { className: "text-xl", children: "Translating" }),
+                /* @__PURE__ */ jsx20(TooltipProvider, { children: /* @__PURE__ */ jsxs8(Tooltip, { delayDuration: 100, children: [
+                  /* @__PURE__ */ jsx20(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsx20(Button, { size: "icon", variant: "link", children: /* @__PURE__ */ jsx20(InfoCircledIcon2, { className: "w-4 h-4" }) }) }),
                   /* @__PURE__ */ jsxs8(TooltipContent, { children: [
-                    /* @__PURE__ */ jsx21("span", { className: "italic", children: "Translating" }),
+                    /* @__PURE__ */ jsx20("span", { className: "italic", children: "Translating" }),
                     " ideas and goals into written words and sentences;"
                   ] })
                 ] }) })
               ] }),
-              /* @__PURE__ */ jsx21("ul", { className: "space-y-4", children: /* @__PURE__ */ jsx21(GridSelect, { atom: blockTranslatingStageAnnotationAtom }) })
+              /* @__PURE__ */ jsx20("ul", { className: "space-y-4", children: /* @__PURE__ */ jsx20(GridSelect, { atom: blockTranslatingStageAnnotationAtom }) })
             ] }),
             /* @__PURE__ */ jsxs8("div", { className: "flex flex-col space-y-4 mt-4 mb-4", children: [
-              /* @__PURE__ */ jsx21(Label, { className: "text-xl", children: "Reviewing" }),
+              /* @__PURE__ */ jsx20(Label, { className: "text-xl", children: "Reviewing" }),
               /* @__PURE__ */ jsxs8("ul", { className: "space-y-4", children: [
-                /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+                /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                   GridSelect,
                   {
                     label: "Evaluating written text",
                     atom: blockReviewingEvaluatingStageAnnotationAtom
                   }
                 ) }),
-                /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+                /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                   GridSelect,
                   {
                     label: "Revising written text",
@@ -1499,33 +1475,33 @@ function PauseForm({
               ] })
             ] })
           ] }),
-          /* @__PURE__ */ jsx21(TabsContent, { value: "step-2", children: /* @__PURE__ */ jsxs8("div", { className: "flex flex-col space-y-4 mt-4 mb-4", children: [
-            /* @__PURE__ */ jsx21(Label, { className: "text-xl", children: "What kinds of AI assistance can help with this block?" }),
+          /* @__PURE__ */ jsx20(TabsContent, { value: "step-2", children: /* @__PURE__ */ jsxs8("div", { className: "flex flex-col space-y-4 mt-4 mb-4", children: [
+            /* @__PURE__ */ jsx20(Label, { className: "text-xl", children: "What kinds of AI assistance can help with this block?" }),
             /* @__PURE__ */ jsxs8("ul", { className: "space-y-4", children: [
-              /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+              /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                 GridSelect,
                 {
                   label: "AI suggests ideas to write about, e.g., \u201C<response from AI>\u201D",
                   atom: blockAiAssistanceIdeasAnnotationAtom
                 }
               ) }),
-              /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+              /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                 GridSelect,
                 {
                   label: "AI helps complete the sentence you are writing, e.g., \u201C<response from AI>\u201D",
                   atom: blockAiAssistanceIdeasAnnotationAtom
                 }
               ) }),
-              /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsx21(
+              /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsx20(
                 GridSelect,
                 {
                   label: "AI provides feedback to the sentence you are writing, e.g., \u201C<response from AI>\u201D",
                   atom: blockAiAssistanceFeedbackAnnotationAtom
                 }
               ) }),
-              /* @__PURE__ */ jsx21("li", { children: /* @__PURE__ */ jsxs8("div", { className: "flex flex-col space-y-2", children: [
-                /* @__PURE__ */ jsx21(Label, { htmlFor: "custom-ai-support", children: "Others, please specify" }),
-                /* @__PURE__ */ jsx21(
+              /* @__PURE__ */ jsx20("li", { children: /* @__PURE__ */ jsxs8("div", { className: "flex flex-col space-y-2", children: [
+                /* @__PURE__ */ jsx20(Label, { htmlFor: "custom-ai-support", children: "Others, please specify" }),
+                /* @__PURE__ */ jsx20(
                   Textarea,
                   {
                     id: "custom-ai-support",
@@ -1539,14 +1515,14 @@ function PauseForm({
             ] })
           ] }) })
         ] }),
-        /* @__PURE__ */ jsx21(SheetFooter, { children: /* @__PURE__ */ jsx21(Button, { type: "submit", onClick: onClose, children: "Save changes" }) })
+        /* @__PURE__ */ jsx20(SheetFooter, { children: /* @__PURE__ */ jsx20(Button, { type: "submit", onClick: onClose, children: "Save changes" }) })
       ] })
     }
   );
 }
 
 // src/components/time-travel/replayer.tsx
-import { jsx as jsx22, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx21, jsxs as jsxs9 } from "react/jsx-runtime";
 var PLAYBACK_SPEEDS = [0.5, 0.25, 1, 2, 4];
 function Replayer() {
   const [editor] = useLexicalComposerContext5();
@@ -1611,7 +1587,7 @@ function Replayer() {
     blockThresholdInSec
   ]);
   return /* @__PURE__ */ jsxs9("div", { className: "flex flex-col space-y-2 w-full", children: [
-    /* @__PURE__ */ jsx22(
+    /* @__PURE__ */ jsx21(
       PauseForm,
       {
         open: pauseFormOpen,
@@ -1625,7 +1601,7 @@ function Replayer() {
       }
     ),
     /* @__PURE__ */ jsxs9("div", { className: "grid grid-cols-3 items-center", children: [
-      /* @__PURE__ */ jsx22(
+      /* @__PURE__ */ jsx21(
         Toggle,
         {
           className: "justify-self-start",
@@ -1645,9 +1621,9 @@ function Replayer() {
             }
           },
           children: {
-            ["idle" /* Idle */]: /* @__PURE__ */ jsx22(PlayIcon2, { className: "w-4 h-4" }),
-            ["playing" /* Playing */]: /* @__PURE__ */ jsx22(StopIcon2, { className: "w-4 h-4" }),
-            ["finished" /* Finished */]: /* @__PURE__ */ jsx22(ReloadIcon, { className: "w-4 h-4" })
+            ["idle" /* Idle */]: /* @__PURE__ */ jsx21(PlayIcon2, { className: "w-4 h-4" }),
+            ["playing" /* Playing */]: /* @__PURE__ */ jsx21(StopIcon2, { className: "w-4 h-4" }),
+            ["finished" /* Finished */]: /* @__PURE__ */ jsx21(ReloadIcon, { className: "w-4 h-4" })
           }[replayState]
         }
       ),
@@ -1674,7 +1650,7 @@ function Replayer() {
         }
       )
     ] }),
-    /* @__PURE__ */ jsx22(
+    /* @__PURE__ */ jsx21(
       Slider,
       {
         min: 1,
@@ -1687,7 +1663,7 @@ function Replayer() {
         }
       }
     ),
-    /* @__PURE__ */ jsx22("div", { className: "flex justify-between items-center", children: /* @__PURE__ */ jsx22(
+    /* @__PURE__ */ jsx21("div", { className: "flex justify-between items-center", children: /* @__PURE__ */ jsx21(
       Button,
       {
         variant: "link",
@@ -1707,7 +1683,7 @@ function Replayer() {
 }
 
 // src/components/time-travel/index.tsx
-import { Fragment, jsx as jsx23, jsxs as jsxs10 } from "react/jsx-runtime";
+import { Fragment, jsx as jsx22, jsxs as jsxs10 } from "react/jsx-runtime";
 function TimeTravel({
   configuration
 }) {
@@ -1726,18 +1702,18 @@ function TimeTravel({
   if (!configuration || !configuration.enabled) {
     return null;
   }
-  return /* @__PURE__ */ jsx23(Fragment, { children: /* @__PURE__ */ jsxs10(Card, { children: [
+  return /* @__PURE__ */ jsx22(Fragment, { children: /* @__PURE__ */ jsxs10(Card, { children: [
     /* @__PURE__ */ jsxs10(CardHeader, { children: [
-      /* @__PURE__ */ jsx23(CardTitle, { children: "Time Travel" }),
-      /* @__PURE__ */ jsx23(CardDescription, { children: "See how your essay has evolved." })
+      /* @__PURE__ */ jsx22(CardTitle, { children: "Time Travel" }),
+      /* @__PURE__ */ jsx22(CardDescription, { children: "See how your essay has evolved." })
     ] }),
-    /* @__PURE__ */ jsx23(CardContent, { className: "flex justify-between items-center space-x-2", children: {
-      ["recording" /* Recording */]: /* @__PURE__ */ jsx23(Recorder, { timeTravelConfiguration: configuration }),
-      ["relaying" /* Replaying */]: /* @__PURE__ */ jsx23(Replayer, {})
+    /* @__PURE__ */ jsx22(CardContent, { className: "flex justify-between items-center space-x-2", children: {
+      ["recording" /* Recording */]: /* @__PURE__ */ jsx22(Recorder, { timeTravelConfiguration: configuration }),
+      ["relaying" /* Replaying */]: /* @__PURE__ */ jsx22(Replayer, {})
     }[timeTravelState] }),
-    /* @__PURE__ */ jsx23(CardFooter, { children: /* @__PURE__ */ jsxs10("div", { className: "flex flex-col space-y-2 w-full", children: [
-      /* @__PURE__ */ jsx23(Label3, { htmlFor: "blockThresholdInSec", children: "Block Threshold (in sec)" }),
-      /* @__PURE__ */ jsx23(
+    /* @__PURE__ */ jsx22(CardFooter, { children: /* @__PURE__ */ jsxs10("div", { className: "flex flex-col space-y-2 w-full", children: [
+      /* @__PURE__ */ jsx22(Label3, { htmlFor: "blockThresholdInSec", children: "Block Threshold (in sec)" }),
+      /* @__PURE__ */ jsx22(
         Input,
         {
           id: "blockThresholdInSec",
@@ -1754,23 +1730,23 @@ function TimeTravel({
 }
 
 // src/components/lexical-editor/plugins/timetravel-plugin.tsx
-import { jsx as jsx24 } from "react/jsx-runtime";
+import { jsx as jsx23 } from "react/jsx-runtime";
 function TimeTravelPlugin({
   configuration
 }) {
   if (!configuration.enabled) {
     return null;
   }
-  return /* @__PURE__ */ jsx24("div", { className: "absolute top-0 left-0 z-20 m-4", children: /* @__PURE__ */ jsx24(TimeTravel, { configuration }) });
+  return /* @__PURE__ */ jsx23("div", { className: "absolute top-0 left-0 z-20 m-4", children: /* @__PURE__ */ jsx23(TimeTravel, { configuration }) });
 }
 
 // src/components/lexical-editor/plugins/treeview-plugin.tsx
 import { useLexicalComposerContext as useLexicalComposerContext7 } from "@lexical/react/LexicalComposerContext";
 import { TreeView } from "@lexical/react/LexicalTreeView";
-import { jsx as jsx25 } from "react/jsx-runtime";
+import { jsx as jsx24 } from "react/jsx-runtime";
 function TreeViewPlugin() {
   const [editor] = useLexicalComposerContext7();
-  return /* @__PURE__ */ jsx25(
+  return /* @__PURE__ */ jsx24(
     TreeView,
     {
       viewClassName: "tree-view-output",
@@ -1786,7 +1762,7 @@ function TreeViewPlugin() {
 
 // src/components/lexical-editor/plugins/user-behavior-detector-plugin.tsx
 import { useSetAtom as useSetAtom3 } from "jotai";
-import React15, { useEffect as useEffect7 } from "react";
+import React14, { useEffect as useEffect7 } from "react";
 
 // src/utils/hooks/use-leaving-count.tsx
 import { useEffect as useEffect6, useState as useState2 } from "react";
@@ -1820,8 +1796,8 @@ function UserBehaviorDetectorPlugin() {
   const [editor] = useLexicalComposerContext8();
   const setTypingSpeed = useSetAtom3(typingSpeedAtom);
   const setProbDistraction = useSetAtom3(probDistractionAtom);
-  const lastCharacterCount = React15.useRef(0);
-  const lastTime = React15.useRef(Date.now());
+  const lastCharacterCount = React14.useRef(0);
+  const lastTime = React14.useRef(Date.now());
   const { count } = useLeavingCount();
   useEffect7(() => {
     const removeTextContentListener = editor.registerTextContentListener(
@@ -1845,7 +1821,7 @@ function UserBehaviorDetectorPlugin() {
 }
 
 // src/components/lexical-editor/index.tsx
-import { Fragment as Fragment2, jsx as jsx26, jsxs as jsxs11 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx25, jsxs as jsxs11 } from "react/jsx-runtime";
 function prepopulatedRichText() {
   const root = $getRoot2();
   if (root.getFirstChild() === null) {
@@ -1916,57 +1892,56 @@ var Editor = ({
     onUserBehaviorChange == null ? void 0 : onUserBehaviorChange(userBehavior);
   }, [userBehavior]);
   return /* @__PURE__ */ jsxs11("div", { className: "relative h-full overflow-auto", children: [
-    /* @__PURE__ */ jsx26(Toaster, { position: "bottom-left" }),
+    /* @__PURE__ */ jsx25(Toaster, { position: "bottom-left" }),
     debugMode && /* @__PURE__ */ jsxs11(Card, { className: "fixed bottom-10 right-10", children: [
-      /* @__PURE__ */ jsx26(CardHeader, { children: /* @__PURE__ */ jsx26(CardTitle, { children: "User Behavior" }) }),
-      /* @__PURE__ */ jsx26(CardContent, { children: /* @__PURE__ */ jsxs11("div", { className: "space-y-4", children: [
+      /* @__PURE__ */ jsx25(CardHeader, { children: /* @__PURE__ */ jsx25(CardTitle, { children: "User Behavior" }) }),
+      /* @__PURE__ */ jsx25(CardContent, { children: /* @__PURE__ */ jsxs11("div", { className: "space-y-4", children: [
         /* @__PURE__ */ jsxs11("div", { className: "space-y-2", children: [
-          /* @__PURE__ */ jsx26("p", { className: "text-sm font-medium leading-none", children: "Typing Speed" }),
+          /* @__PURE__ */ jsx25("p", { className: "text-sm font-medium leading-none", children: "Typing Speed" }),
           /* @__PURE__ */ jsxs11("p", { className: "text-sm text-muted-foreground", children: [
             typingSpeed.toFixed(2),
             " chars/s"
           ] })
         ] }),
         /* @__PURE__ */ jsxs11("div", { className: "space-y-2", children: [
-          /* @__PURE__ */ jsx26("p", { className: "text-sm font-medium leading-none", children: "Distraction Count" }),
+          /* @__PURE__ */ jsx25("p", { className: "text-sm font-medium leading-none", children: "Distraction Count" }),
           /* @__PURE__ */ jsxs11("p", { className: "text-sm text-muted-foreground", children: [
             probDistraction,
             " times"
           ] })
         ] })
       ] }) }),
-      /* @__PURE__ */ jsx26(CardFooter, {})
+      /* @__PURE__ */ jsx25(CardFooter, {})
     ] }),
     /* @__PURE__ */ jsxs11("div", { className: "h-full flex flex-row justify-center space-x-4", children: [
-      /* @__PURE__ */ jsx26(
+      /* @__PURE__ */ jsx25(
         "div",
         {
           className: "w-full relative p-6 rounded-xl border bg-card text-card-foreground shadow",
           children: /* @__PURE__ */ jsxs11(LexicalComposer, { initialConfig: config, children: [
-            /* @__PURE__ */ jsx26(
+            /* @__PURE__ */ jsx25(
               RichTextPlugin,
               {
-                contentEditable: /* @__PURE__ */ jsx26(ContentEditable, {}),
+                contentEditable: /* @__PURE__ */ jsx25(ContentEditable, {}),
                 placeholder: null,
                 ErrorBoundary: LexicalErrorBoundary
               }
             ),
-            /* @__PURE__ */ jsx26(AutoFocusPlugin, {}),
-            /* @__PURE__ */ jsx26(MarkdownShortcutPlugin, { transformers: TRANSFORMERS }),
-            /* @__PURE__ */ jsx26(HistoryPlugin, {}),
-            /* @__PURE__ */ jsx26(ListPlugin, {}),
-            /* @__PURE__ */ jsx26(LinkPlugin, {}),
-            /* @__PURE__ */ jsx26(TabIndentationPlugin, {}),
-            /* @__PURE__ */ jsx26(AiHighlightPlugin, { debugMode }),
-            /* @__PURE__ */ jsx26(UserBehaviorDetectorPlugin, {}),
-            /* @__PURE__ */ jsx26(CommentPlugin, {}),
-            /* @__PURE__ */ jsx26(Fragment2, { children: !!debugMode && /* @__PURE__ */ jsx26("div", { className: "absolute bottom-0 left-0 border border-red-500 overflow-auto max-w-full h-1/2", children: /* @__PURE__ */ jsx26(TreeViewPlugin, {}) }) }),
-            /* @__PURE__ */ jsx26(Fragment2, { children: timeTravelConfiguration && /* @__PURE__ */ jsx26(TimeTravelPlugin, { configuration: timeTravelConfiguration }) })
+            /* @__PURE__ */ jsx25(AutoFocusPlugin, {}),
+            /* @__PURE__ */ jsx25(MarkdownShortcutPlugin, { transformers: TRANSFORMERS }),
+            /* @__PURE__ */ jsx25(HistoryPlugin, {}),
+            /* @__PURE__ */ jsx25(ListPlugin, {}),
+            /* @__PURE__ */ jsx25(LinkPlugin, {}),
+            /* @__PURE__ */ jsx25(TabIndentationPlugin, {}),
+            /* @__PURE__ */ jsx25(AiHighlightPlugin, { debugMode }),
+            /* @__PURE__ */ jsx25(UserBehaviorDetectorPlugin, {}),
+            /* @__PURE__ */ jsx25(CommentPlugin, {}),
+            /* @__PURE__ */ jsx25(Fragment2, { children: !!debugMode && /* @__PURE__ */ jsx25("div", { className: "absolute bottom-0 left-0 border border-red-500 overflow-auto max-w-full h-1/2", children: /* @__PURE__ */ jsx25(TreeViewPlugin, {}) }) }),
+            /* @__PURE__ */ jsx25(Fragment2, { children: timeTravelConfiguration && /* @__PURE__ */ jsx25(TimeTravelPlugin, { configuration: timeTravelConfiguration }) })
           ] })
         }
       ),
-      /* @__PURE__ */ jsx26(Separator, { orientation: "vertical" }),
-      /* @__PURE__ */ jsx26(CommentList, {})
+      /* @__PURE__ */ jsx25(CommentList, {})
     ] })
   ] });
 };

@@ -8,7 +8,7 @@ export default function CommentList() {
   const splitedComments = splitAtom(commentsAtom);
   const [comments, dispatch] = useAtom(splitedComments);
 
-  return (
+  return comments.length > 0 ? (
     <div className="space-y-4 min-w-fit">
       {comments.map((comment, id) => (
         <CommentItem
@@ -20,5 +20,5 @@ export default function CommentList() {
         />
       ))}
     </div>
-  );
+  ) : null;
 }

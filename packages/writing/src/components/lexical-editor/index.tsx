@@ -214,7 +214,7 @@ const Editor: React.FC<EditorProps> = ({
           </LexicalComposer>
         </div>
 
-        <Separator orientation={"vertical"} />
+        {/* <Separator orientation={"vertical"} /> */}
         <CommentList />
       </div>
     </div>
