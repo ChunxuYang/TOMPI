@@ -17,7 +17,7 @@ import {
 
 export default function UserNav() {
   const { data: session } = useSession();
-  console.log(session);
+  console.log("session>>>", session);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

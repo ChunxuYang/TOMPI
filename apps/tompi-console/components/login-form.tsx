@@ -129,7 +129,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         onClick={async () => {
           setIsLoading(true);
           await signIn("github", { callbackUrl: "/" });
-          setIsLoading(false);
+          // setIsLoading(false);
         }}
       >
         {isLoading ? (
@@ -147,7 +147,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         onClick={async () => {
           setIsLoading(true);
           await signIn("google", { callbackUrl: "/" });
-          setIsLoading(false);
+          // setIsLoading(false);
         }}
       >
         {isLoading ? (

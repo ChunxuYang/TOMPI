@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1700595210713,
+      "tag": "0000_rich_sheva_callister",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1700595308409,
+      "tag": "0001_last_boom_boom",
+      "breakpoints": true
+    }
+  ]
+}
