@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 import { TimeTravelSaveLogItem } from "@tompi/writing";
@@ -10,6 +11,12 @@ export const useTimeTravelLogs = (
   const [timeTravelLogList, setTimeTravelLogList] = useState<
     TimeTravelSaveLogItem[]
   >(initialTimeTravelLogList);
+
+  const { data: session } = useSession();
+
+  const userId = session?.user.id;
+
+  console.log("userId", userId);
 
   const addTimeTravelLog = (log: TimeTravelSaveLogItem) => {
     setTimeTravelLogList((prev) => [...prev, log]);
