@@ -1,0 +1,1 @@
+ALTER TABLE "editorState" ALTER COLUMN "time" SET DATA TYPE timestamp;

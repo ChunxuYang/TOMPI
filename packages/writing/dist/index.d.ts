@@ -1,4 +1,4 @@
-import { EditorState } from 'lexical';
+import { SerializedEditorState } from 'lexical';
 import { ExternalToast } from 'sonner';
 
 /**
@@ -51,12 +51,12 @@ type UserBehaviorCategorized = {
 };
 
 type TimeTravelLogItemType = {
-    time: number;
-    editorState: EditorState;
+    time: Date;
+    editorState: SerializedEditorState;
 };
 type TimeTravelSaveLogItem = {
     id: string;
-    saveTime: number;
+    saveTime: Date;
     log: TimeTravelLogsType;
 };
 type TimeTravelLogsType = TimeTravelLogItemType[];

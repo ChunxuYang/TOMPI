@@ -1,10 +1,10 @@
 import { atom } from "jotai";
 import { focusAtom } from "jotai-optics";
-import { EditorState } from "lexical";
+import { SerializedEditorState } from "lexical";
 
 type TimeTravelLogItemType = {
-  time: number;
-  editorState: EditorState;
+  time: Date;
+  editorState: SerializedEditorState;
 };
 
 export enum TimeTravelState {
@@ -25,7 +25,7 @@ export enum TimeTravelReplayerState {
 
 export type TimeTravelSaveLogItem = {
   id: string;
-  saveTime: number;
+  saveTime: Date;
   log: TimeTravelLogsType;
 };
 
@@ -39,7 +39,7 @@ export const timeTravelAtom = atom<{
   timeTravelRecorderState: TimeTravelRecorderState;
   timeTravelReplayerState: TimeTravelReplayerState;
   currentTimeTravelLog: TimeTravelLogsType;
-  latestEditorState: EditorState | null;
+  latestEditorState: SerializedEditorState | null;
   blockThresholdInSec: number;
 }>({
   timeTravelState: TimeTravelState.Recording,
@@ -50,24 +50,6 @@ export const timeTravelAtom = atom<{
   blockThresholdInSec: 5,
 });
 
-// export const currentTimeTravelLogAtom = atom<TimeTravelLogsType>([]);
-
-// export const timeTravelLogListAtom = atom<TimeTravelSaveLogItem[]>([]);
-
-// export const timeTravelRecorderStateAtom = atom<TimeTravelRecorderState>(
-//   TimeTravelRecorderState.Idle
-// );
-
-// export const timeTravelReplayerStateAtom = atom<TimeTravelReplayerState>(
-//   TimeTravelReplayerState.Idle
-// );
-
-// export const timeTravelStateAtom = atom<TimeTravelState>(
-//   TimeTravelState.Recording
-// );
-
-// export const latestEditorStateAtom = atom<EditorState | null>(null);
-// use focusAtom to export all the atoms
 export const currentTimeTravelLogAtom = focusAtom(timeTravelAtom, (optic) =>
   optic.prop("currentTimeTravelLog")
 );

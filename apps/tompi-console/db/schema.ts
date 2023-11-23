@@ -1,10 +1,14 @@
+import { InferSelectModel, relations } from "drizzle-orm";
 import {
   integer,
+  jsonb,
   pgTable,
   primaryKey,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
+import { SerializedEditorState } from "lexical";
 
 import type { AdapterAccount } from "@auth/core/adapters";
 
@@ -17,6 +21,8 @@ export const users = pgTable("user", {
 
   username: text("username").unique(),
 });
+
+export type UserModel = InferSelectModel<typeof users>;
 
 export const accounts = pgTable(
   "account",
@@ -59,3 +65,41 @@ export const verificationTokens = pgTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   })
 );
+
+export const editorStates = pgTable("editorState", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  time: timestamp("time", { mode: "date", withTimezone: true }).notNull(),
+  editorState: jsonb("editorState").notNull().$type<SerializedEditorState>(),
+  travelLogId: uuid("travelLogId").notNull(),
+  // content is a jsonb type
+  // content: text("content").notNull().$type<any>(),
+});
+
+export const timeTravelLogs = pgTable("timeTravelLog", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("userId").notNull(),
+  saveTime: timestamp("saveTime", { mode: "date", withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export type TimeTravelLogModel = InferSelectModel<typeof timeTravelLogs>;
+export type EditorStateModel = InferSelectModel<typeof editorStates>;
+
+export const timeTravelLogsRelations = relations(
+  timeTravelLogs,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [timeTravelLogs.userId],
+      references: [users.id],
+    }),
+    editorStates: many(editorStates),
+  })
+);
+
+export const editorStatesRelations = relations(editorStates, ({ one }) => ({
+  timeTravelLog: one(timeTravelLogs, {
+    fields: [editorStates.travelLogId],
+    references: [timeTravelLogs.id],
+  }),
+}));

@@ -1,4 +1,19 @@
-import { EditorConfig, ParagraphNode } from "lexical";
+import {
+  EditorConfig,
+  LexicalNode,
+  ParagraphNode,
+  SerializedElementNode,
+  Spread,
+} from "lexical";
+
+export type SerializedCustomParagraphNode = Spread<
+  {
+    id: string;
+    comment: boolean;
+    active: boolean;
+  },
+  SerializedElementNode
+>;
 
 let current_id = 0;
 
@@ -49,6 +64,26 @@ export class CustomParagraphNode extends ParagraphNode {
       }
     }
     return updated;
+  }
+
+  exportJSON(): SerializedCustomParagraphNode {
+    console.log("exportJSON");
+    return {
+      ...super.exportJSON(),
+      id: this.__id,
+      active: this.__active,
+      comment: this.__comment,
+      // comment: this.__comment,
+      // active: this.__active,
+    };
+  }
+
+  importJSON(json: SerializedCustomParagraphNode): LexicalNode {
+    super.importJSON(json);
+    this.__comment = json.comment;
+    this.__active = json.active;
+    this.__id = json.id;
+    return this;
   }
 
   setComment(comment: boolean) {

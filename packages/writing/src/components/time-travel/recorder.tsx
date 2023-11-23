@@ -33,12 +33,13 @@ export default function Recorder({ timeTravelConfiguration }: RecorderProps) {
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
+        console.log(editorState.toJSON());
         if (timeTravelRecorderState === TimeTravelRecorderState.Recording) {
           currentTimeTravelLogs.current = [
             ...currentTimeTravelLogs.current,
             {
-              time: Date.now(),
-              editorState,
+              time: new Date(),
+              editorState: editorState.toJSON(),
             },
           ];
         }
@@ -77,7 +78,7 @@ export default function Recorder({ timeTravelConfiguration }: RecorderProps) {
 
             timeTravelConfiguration.onAddLog({
               id: Math.random().toString(),
-              saveTime: Date.now(),
+              saveTime: new Date(),
               log: currentTimeTravelLogs.current,
             });
 

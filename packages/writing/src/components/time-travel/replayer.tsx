@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { EditorState } from "lexical";
+import { SerializedEditorState } from "lexical";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Label } from "@/components/ui/label";
@@ -38,9 +38,9 @@ export default function Replayer() {
   const blockThresholdInSec = useAtomValue(blockThresholdInSecAtom);
 
   const setEditorState = useCallback(
-    (editorState: EditorState) => {
+    (editorState: SerializedEditorState) => {
       console.log("setEditorState", editorState);
-      editor.setEditorState(editorState);
+      editor.setEditorState(editor.parseEditorState(editorState));
     },
     [editor]
   );
@@ -69,7 +69,7 @@ export default function Replayer() {
 
         const currentTime = timeTravelLogs[currentStep].time;
         const nextTime = timeTravelLogs[currentStep + 1].time;
-        const timeDiff = nextTime - currentTime;
+        const timeDiff = nextTime.getTime() - currentTime.getTime();
 
         if (timeDiff > blockThresholdInSec * 1000) {
           setPauseFormOpen(true);

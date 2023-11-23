@@ -1,9 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useTransition } from "react";
 
+import { addTimeTravelLog, removeTimeTravelLog } from "@/db/actions";
 import { useTimeTravelLogs } from "@/utils/time-travel-log";
-import { EditorProps } from "@tompi/writing";
+import { EditorProps, TimeTravelSaveLogItem } from "@tompi/writing";
 
 const Editor = dynamic<EditorProps>(
   () => import("@tompi/writing").then((mod) => mod.Editor),
@@ -12,13 +14,34 @@ const Editor = dynamic<EditorProps>(
   }
 );
 
-export default function TompiEditor() {
-  const {
-    timeTravelLogList,
-    addTimeTravelLog,
-    removeTimeTravelLog,
-    updateTimeTravelLog,
-  } = useTimeTravelLogs([]);
+interface TompiEditorProps {
+  timeTravelLogList: TimeTravelSaveLogItem[];
+}
+
+export default function TompiEditor({ timeTravelLogList }: TompiEditorProps) {
+  // const {
+  //   // timeTravelLogList,
+  //   addTimeTravelLog,
+  //   removeTimeTravelLog,
+  //   updateTimeTravelLog,
+  // } = useTimeTravelLogs([]);
+
+  const [isPending, startTransition] = useTransition();
+
+  const onAddLog = async (log: TimeTravelSaveLogItem) => {
+    console.log("onAddLog", log);
+    fetch("/api/time-travel", {
+      method: "POST",
+      body: JSON.stringify(log),
+    });
+  };
+
+  const onDeleteLog = async (id: string) => {
+    fetch("/api/time-travel", {
+      method: "DELETE",
+      body: JSON.stringify(id),
+    });
+  };
 
   return (
     <div className="flex-1 relative">
@@ -26,9 +49,9 @@ export default function TompiEditor() {
         timeTravelConfiguration={{
           enabled: true,
           logsList: timeTravelLogList,
-          onAddLog: addTimeTravelLog,
-          onUpdateLog: updateTimeTravelLog,
-          onDeleteLog: removeTimeTravelLog,
+          onAddLog,
+          onUpdateLog: () => {},
+          onDeleteLog,
         }}
       />
     </div>

@@ -553,6 +553,23 @@ var CustomParagraphNode = class _CustomParagraphNode extends import_lexical2.Par
     }
     return updated;
   }
+  exportJSON() {
+    console.log("exportJSON");
+    return __spreadProps(__spreadValues({}, super.exportJSON()), {
+      id: this.__id,
+      active: this.__active,
+      comment: this.__comment
+      // comment: this.__comment,
+      // active: this.__active,
+    });
+  }
+  importJSON(json) {
+    super.importJSON(json);
+    this.__comment = json.comment;
+    this.__active = json.active;
+    this.__id = json.id;
+    return this;
+  }
   setComment(comment) {
     const writable = this.getWritable();
     writable.__comment = comment;
@@ -562,9 +579,6 @@ var CustomParagraphNode = class _CustomParagraphNode extends import_lexical2.Par
     writable.__active = active;
   }
 };
-function $createCustomParagraphNode(comment, active) {
-  return new CustomParagraphNode(comment, active);
-}
 
 // src/components/lexical-editor/plugins/comment-plugin.tsx
 var HIGHLIGHT_RANGE_COMMAND = (0, import_lexical3.createCommand)();
@@ -842,7 +856,7 @@ function LogList({
             variant: "link",
             onClick: () => {
               setCurrentTimeTravelLog(log.log);
-              setLatestEditorState(editor.getEditorState());
+              setLatestEditorState(editor.getEditorState().toJSON());
               setTimeTravelState("relaying" /* Replaying */);
               editor.focus();
             },
@@ -876,12 +890,13 @@ function Recorder({ timeTravelConfiguration }) {
   (0, import_react3.useEffect)(() => {
     return (0, import_utils8.mergeRegister)(
       editor.registerUpdateListener(({ editorState }) => {
+        console.log(editorState.toJSON());
         if (timeTravelRecorderState === "recording" /* Recording */) {
           currentTimeTravelLogs.current = [
             ...currentTimeTravelLogs.current,
             {
-              time: Date.now(),
-              editorState
+              time: /* @__PURE__ */ new Date(),
+              editorState: editorState.toJSON()
             }
           ];
         }
@@ -911,7 +926,7 @@ function Recorder({ timeTravelConfiguration }) {
           setTimeTravelRecorderState("idle" /* Idle */);
           timeTravelConfiguration.onAddLog({
             id: Math.random().toString(),
-            saveTime: Date.now(),
+            saveTime: /* @__PURE__ */ new Date(),
             log: currentTimeTravelLogs.current
           });
           import_sonner.toast.success("Recording saved.");
@@ -1559,7 +1574,7 @@ function Replayer() {
   const setEditorState = (0, import_react4.useCallback)(
     (editorState) => {
       console.log("setEditorState", editorState);
-      editor.setEditorState(editorState);
+      editor.setEditorState(editor.parseEditorState(editorState));
     },
     [editor]
   );
@@ -1581,7 +1596,7 @@ function Replayer() {
         }
         const currentTime = timeTravelLogs[currentStep].time;
         const nextTime = timeTravelLogs[currentStep + 1].time;
-        const timeDiff = nextTime - currentTime;
+        const timeDiff = nextTime.getTime() - currentTime.getTime();
         if (timeDiff > blockThresholdInSec * 1e3) {
           setPauseFormOpen(true);
           setReplayState("idle" /* Idle */);
@@ -1759,7 +1774,7 @@ function TimeTravelPlugin({
   if (!configuration.enabled) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "absolute top-0 left-0 z-20 m-4", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(TimeTravel, { configuration }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "absolute bottom-0 left-0 z-20 m-4", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(TimeTravel, { configuration }) });
 }
 
 // src/components/lexical-editor/plugins/treeview-plugin.tsx
@@ -1844,25 +1859,6 @@ function UserBehaviorDetectorPlugin() {
 
 // src/components/lexical-editor/index.tsx
 var import_jsx_runtime25 = require("react/jsx-runtime");
-function prepopulatedRichText() {
-  const root = (0, import_lexical4.$getRoot)();
-  if (root.getFirstChild() === null) {
-    const paragraph = $createCustomParagraphNode(false, false);
-    paragraph.append(
-      (0, import_lexical4.$createTextNode)(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
-      )
-    );
-    root.append(paragraph);
-    const paragraph2 = $createCustomParagraphNode(false, false);
-    paragraph2.append(
-      (0, import_lexical4.$createTextNode)(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
-      )
-    );
-    root.append(paragraph2);
-  }
-}
 function onError(error) {
   console.error(error);
 }
@@ -1896,16 +1892,16 @@ var Editor = ({
       import_link.LinkNode,
       import_mark.MarkNode,
       AiHiglightNode,
-      CustomParagraphNode,
-      {
-        replace: import_lexical4.ParagraphNode,
-        with(node) {
-          return new CustomParagraphNode(false, false);
-        }
-      }
+      CustomParagraphNode
+      // {
+      //   replace: ParagraphNode,
+      //   with(node) {
+      //     return new CustomParagraphNode(false, false);
+      //   },
+      // },
     ],
-    onError,
-    editorState: prepopulatedRichText
+    onError
+    // editorState: prepopulatedRichText,
   };
   const typingSpeed = (0, import_jotai15.useAtomValue)(typingSpeedAtom);
   const probDistraction = (0, import_jotai15.useAtomValue)(probDistractionAtom);

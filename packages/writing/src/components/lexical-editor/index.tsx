@@ -119,15 +119,15 @@ const Editor: React.FC<EditorProps> = ({
       MarkNode,
       AiHiglightNode,
       CustomParagraphNode,
-      {
-        replace: ParagraphNode,
-        with(node) {
-          return new CustomParagraphNode(false, false);
-        },
-      },
+      // {
+      //   replace: ParagraphNode,
+      //   with(node) {
+      //     return new CustomParagraphNode(false, false);
+      //   },
+      // },
     ],
     onError,
-    editorState: prepopulatedRichText,
+    // editorState: prepopulatedRichText,
   };
 
   const typingSpeed = useAtomValue(typingSpeedAtom);

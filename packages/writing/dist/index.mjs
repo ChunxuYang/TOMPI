@@ -59,7 +59,7 @@ styleInject('*,\n::before,\n::after {\n  box-sizing: border-box;\n  border-width
 
 // src/components/lexical-editor/index.tsx
 import { useAtomValue as useAtomValue6 } from "jotai";
-import { $createTextNode as $createTextNode2, $getRoot as $getRoot2, ParagraphNode as ParagraphNode2 } from "lexical";
+import { $createTextNode as $createTextNode2, $getRoot as $getRoot2 } from "lexical";
 import { useEffect as useEffect8 } from "react";
 import { Toaster } from "sonner";
 
@@ -494,7 +494,9 @@ import { useLexicalComposerContext as useLexicalComposerContext2 } from "@lexica
 import { mergeRegister } from "@lexical/utils";
 
 // src/components/lexical-editor/plugins/custom-paragraph-plugin.tsx
-import { ParagraphNode } from "lexical";
+import {
+  ParagraphNode
+} from "lexical";
 var current_id = 0;
 var CustomParagraphNode = class _CustomParagraphNode extends ParagraphNode {
   constructor(comment, active, key) {
@@ -531,6 +533,23 @@ var CustomParagraphNode = class _CustomParagraphNode extends ParagraphNode {
     }
     return updated;
   }
+  exportJSON() {
+    console.log("exportJSON");
+    return __spreadProps(__spreadValues({}, super.exportJSON()), {
+      id: this.__id,
+      active: this.__active,
+      comment: this.__comment
+      // comment: this.__comment,
+      // active: this.__active,
+    });
+  }
+  importJSON(json) {
+    super.importJSON(json);
+    this.__comment = json.comment;
+    this.__active = json.active;
+    this.__id = json.id;
+    return this;
+  }
   setComment(comment) {
     const writable = this.getWritable();
     writable.__comment = comment;
@@ -540,9 +559,6 @@ var CustomParagraphNode = class _CustomParagraphNode extends ParagraphNode {
     writable.__active = active;
   }
 };
-function $createCustomParagraphNode(comment, active) {
-  return new CustomParagraphNode(comment, active);
-}
 
 // src/components/lexical-editor/plugins/comment-plugin.tsx
 var HIGHLIGHT_RANGE_COMMAND = createCommand2();
@@ -820,7 +836,7 @@ function LogList({
             variant: "link",
             onClick: () => {
               setCurrentTimeTravelLog(log.log);
-              setLatestEditorState(editor.getEditorState());
+              setLatestEditorState(editor.getEditorState().toJSON());
               setTimeTravelState("relaying" /* Replaying */);
               editor.focus();
             },
@@ -854,12 +870,13 @@ function Recorder({ timeTravelConfiguration }) {
   useEffect3(() => {
     return mergeRegister2(
       editor.registerUpdateListener(({ editorState }) => {
+        console.log(editorState.toJSON());
         if (timeTravelRecorderState === "recording" /* Recording */) {
           currentTimeTravelLogs.current = [
             ...currentTimeTravelLogs.current,
             {
-              time: Date.now(),
-              editorState
+              time: /* @__PURE__ */ new Date(),
+              editorState: editorState.toJSON()
             }
           ];
         }
@@ -889,7 +906,7 @@ function Recorder({ timeTravelConfiguration }) {
           setTimeTravelRecorderState("idle" /* Idle */);
           timeTravelConfiguration.onAddLog({
             id: Math.random().toString(),
-            saveTime: Date.now(),
+            saveTime: /* @__PURE__ */ new Date(),
             log: currentTimeTravelLogs.current
           });
           toast.success("Recording saved.");
@@ -1537,7 +1554,7 @@ function Replayer() {
   const setEditorState = useCallback(
     (editorState) => {
       console.log("setEditorState", editorState);
-      editor.setEditorState(editorState);
+      editor.setEditorState(editor.parseEditorState(editorState));
     },
     [editor]
   );
@@ -1559,7 +1576,7 @@ function Replayer() {
         }
         const currentTime = timeTravelLogs[currentStep].time;
         const nextTime = timeTravelLogs[currentStep + 1].time;
-        const timeDiff = nextTime - currentTime;
+        const timeDiff = nextTime.getTime() - currentTime.getTime();
         if (timeDiff > blockThresholdInSec * 1e3) {
           setPauseFormOpen(true);
           setReplayState("idle" /* Idle */);
@@ -1737,7 +1754,7 @@ function TimeTravelPlugin({
   if (!configuration.enabled) {
     return null;
   }
-  return /* @__PURE__ */ jsx23("div", { className: "absolute top-0 left-0 z-20 m-4", children: /* @__PURE__ */ jsx23(TimeTravel, { configuration }) });
+  return /* @__PURE__ */ jsx23("div", { className: "absolute bottom-0 left-0 z-20 m-4", children: /* @__PURE__ */ jsx23(TimeTravel, { configuration }) });
 }
 
 // src/components/lexical-editor/plugins/treeview-plugin.tsx
@@ -1822,25 +1839,6 @@ function UserBehaviorDetectorPlugin() {
 
 // src/components/lexical-editor/index.tsx
 import { Fragment as Fragment2, jsx as jsx25, jsxs as jsxs11 } from "react/jsx-runtime";
-function prepopulatedRichText() {
-  const root = $getRoot2();
-  if (root.getFirstChild() === null) {
-    const paragraph = $createCustomParagraphNode(false, false);
-    paragraph.append(
-      $createTextNode2(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
-      )
-    );
-    root.append(paragraph);
-    const paragraph2 = $createCustomParagraphNode(false, false);
-    paragraph2.append(
-      $createTextNode2(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam fringilla orci vel ex sagittis pretium. Donec a metus sodales, auctor erat nec, laoreet arcu. In ut nunc vel mi molestie varius eu sit amet ligula. Praesent a consequat tortor. Nullam consequat, metus eu pellentesque ultricies, turpis tortor tempor est, a egestas augue dui in felis. Etiam consectetur, felis sed tincidunt tempor, purus lorem rhoncus sem, eu fermentum nisi dui porttitor lectus. Nunc venenatis volutpat risus ut eleifend."
-      )
-    );
-    root.append(paragraph2);
-  }
-}
 function onError(error) {
   console.error(error);
 }
@@ -1874,16 +1872,16 @@ var Editor = ({
       LinkNode,
       MarkNode,
       AiHiglightNode,
-      CustomParagraphNode,
-      {
-        replace: ParagraphNode2,
-        with(node) {
-          return new CustomParagraphNode(false, false);
-        }
-      }
+      CustomParagraphNode
+      // {
+      //   replace: ParagraphNode,
+      //   with(node) {
+      //     return new CustomParagraphNode(false, false);
+      //   },
+      // },
     ],
-    onError,
-    editorState: prepopulatedRichText
+    onError
+    // editorState: prepopulatedRichText,
   };
   const typingSpeed = useAtomValue6(typingSpeedAtom);
   const probDistraction = useAtomValue6(probDistractionAtom);
